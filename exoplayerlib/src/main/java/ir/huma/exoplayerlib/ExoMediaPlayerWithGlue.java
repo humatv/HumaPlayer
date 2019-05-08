@@ -112,7 +112,7 @@ public class ExoMediaPlayerWithGlue extends PlaybackBannerControlGlue<ExoPlayerA
         }, 1000);
 
         return this;
-    } 
+    }
 
     public OnQualityChange getQualityChange() {
         return qualityChange;
@@ -205,6 +205,18 @@ public class ExoMediaPlayerWithGlue extends PlaybackBannerControlGlue<ExoPlayerA
         next();
     }
 
+    public void setIndex(int index){
+        this.index = index;
+    }
+
+    public void setIndexAndPlay(int index){
+        this.index = index;
+        setData();
+        if (onTrackChange != null) {
+            onTrackChange.onChange(index - 1, index);
+        }
+
+    }
 
     @Override
     public void next() {
@@ -339,6 +351,10 @@ public class ExoMediaPlayerWithGlue extends PlaybackBannerControlGlue<ExoPlayerA
         this.onTrackChange = onTrackChange;
     }
 
+    public List<VideoData> getVideoDatas() {
+        return videoDatas;
+    }
+
     public interface OnQualityChange {
         void onQuality(int index, String quality);
     }
@@ -346,5 +362,7 @@ public class ExoMediaPlayerWithGlue extends PlaybackBannerControlGlue<ExoPlayerA
     public interface OnTrackChange {
         void onChange(int old, int current);
     }
+
+
 
 }
