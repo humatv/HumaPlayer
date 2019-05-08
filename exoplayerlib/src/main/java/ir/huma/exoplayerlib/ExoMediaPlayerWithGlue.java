@@ -112,7 +112,7 @@ public class ExoMediaPlayerWithGlue extends PlaybackBannerControlGlue<ExoPlayerA
         }, 1000);
 
         return this;
-    }
+    } 
 
     public OnQualityChange getQualityChange() {
         return qualityChange;
