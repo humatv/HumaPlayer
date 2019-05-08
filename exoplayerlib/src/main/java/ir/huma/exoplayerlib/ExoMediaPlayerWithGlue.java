@@ -56,7 +56,8 @@ public class ExoMediaPlayerWithGlue extends PlaybackBannerControlGlue<ExoPlayerA
     public ExoMediaPlayerWithGlue(ExoPlayerAdapter impl, VideoSupportFragmentGlueHost host, String defaultQuality, VideoData... videoData) {
         super(impl.getContext(), new int[]{10}, impl);
         this.defaultQuality = defaultQuality;
-        this.videoDatas.addAll(Arrays.asList(videoData));
+        if (videoData != null)
+            this.videoDatas.addAll(Arrays.asList(videoData));
 //        if (videoData == null || videoData.length == 0) {
 //            return;
 //        }
