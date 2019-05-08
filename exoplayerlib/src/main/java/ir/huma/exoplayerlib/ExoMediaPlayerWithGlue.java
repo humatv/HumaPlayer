@@ -23,6 +23,10 @@ import android.support.v17.leanback.widget.Action;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.PlaybackControlsRow;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 //import ir.atitec.everythingmanager.manager.FontManager;
 
 /**
@@ -38,7 +42,7 @@ public class ExoMediaPlayerWithGlue extends PlaybackBannerControlGlue<ExoPlayerA
     private PlaybackControlsRow.FastForwardAction forwardAction;
     private PlaybackControlsRow.RewindAction rewindAction;
 
-    private VideoData[] videoDatas;
+    private List<VideoData> videoDatas = new ArrayList<>();
 
     private int index = 0;
     private int qalityIndex = 0;
@@ -47,11 +51,12 @@ public class ExoMediaPlayerWithGlue extends PlaybackBannerControlGlue<ExoPlayerA
     Boolean isPlay = true;
     private OnQualityChange qualityChange;
     private String defaultQuality;
+    private OnTrackChange onTrackChange;
 
     public ExoMediaPlayerWithGlue(ExoPlayerAdapter impl, VideoSupportFragmentGlueHost host, String defaultQuality, VideoData... videoData) {
         super(impl.getContext(), new int[]{10}, impl);
         this.defaultQuality = defaultQuality;
-        this.videoDatas = videoData;
+        this.videoDatas.addAll(Arrays.asList(videoData));
         if (videoData == null || videoData.length == 0) {
             return;
         }
@@ -81,14 +86,15 @@ public class ExoMediaPlayerWithGlue extends PlaybackBannerControlGlue<ExoPlayerA
     }
 
     String fontAddress;
-    public void setTypeface(String fontAddress){
+
+    public void setTypeface(String fontAddress) {
         this.fontAddress = fontAddress;
     }
 
 
     public ExoMediaPlayerWithGlue build() {
         if (getPrimaryActionsAdapter() != null) {
-            if (videoDatas.length > 1) {
+            if (videoDatas.size() > 1) {
                 getPrimaryActionsAdapter().add(0, previousAction);
                 getPrimaryActionsAdapter().add(getPrimaryActionsAdapter().size(), skipNext);
             }
@@ -102,7 +108,7 @@ public class ExoMediaPlayerWithGlue extends PlaybackBannerControlGlue<ExoPlayerA
 //                FontManager.instance(fontAddress).setTypeface(((Activity)getContext()).findViewById(R.id.lb_details_description_title).getRootView());
 
             }
-        },1000);
+        }, 1000);
 
         return this;
     }
@@ -201,31 +207,34 @@ public class ExoMediaPlayerWithGlue extends PlaybackBannerControlGlue<ExoPlayerA
 
     @Override
     public void next() {
-        if (index + 1 < videoDatas.length) {
+        if (index + 1 < videoDatas.size()) {
             index++;
             setData();
+            if (onTrackChange != null) {
+                onTrackChange.onChange(index - 1, index);
+            }
         }
     }
 
     private void setData() {
         getPlayerAdapter().pause();
         qalityIndex = 0;
-        for (int i = 0; i < videoDatas[index].getQualityList().size(); i++) {
-            if (videoDatas[index].getQualityList().get(i).equalsIgnoreCase(defaultQuality)) {
+        for (int i = 0; i < videoDatas.get(index).getQualityList().size(); i++) {
+            if (videoDatas.get(index).getQualityList().get(i).equalsIgnoreCase(defaultQuality)) {
                 qalityIndex = i;
                 break;
             }
         }
 
-        ((ExoPlayerAdapter) getPlayerAdapter()).setDataSource(videoDatas[index].getUrlList().get(qalityIndex), videoDatas[index].isLive());
+        ((ExoPlayerAdapter) getPlayerAdapter()).setDataSource(videoDatas.get(index).getUrlList().get(qalityIndex), videoDatas.get(index).isLive());
         playWhenReady(this);
-        setTitle(videoDatas[index].getTitle());
-        setSubtitle(videoDatas[index].getSubTitle());
+        setTitle(videoDatas.get(index).getTitle());
+        setSubtitle(videoDatas.get(index).getSubTitle());
 
         getSecondaryActionsAdapter().remove(highQualityAction);
-        if (videoDatas[index].getQualityList().size() > 1) {
+        if (videoDatas.get(index).getQualityList().size() > 1) {
 
-            highQualityAction.setDrawables(videoDatas[index].getQualitiesDrawable(getContext()));
+            highQualityAction.setDrawables(videoDatas.get(index).getQualitiesDrawable(getContext()));
             highQualityAction.setIndex(qalityIndex);
 //            notifyActionChanged(highQualityAction);
             getSecondaryActionsAdapter().add(highQualityAction);
@@ -237,15 +246,18 @@ public class ExoMediaPlayerWithGlue extends PlaybackBannerControlGlue<ExoPlayerA
         if (index > 0) {
             index--;
             setData();
+            if (onTrackChange != null) {
+                onTrackChange.onChange(index + 1, index);
+            }
         }
     }
 
     private void changeQuality() {
-        if (videoDatas[index].getQualityList().size() == 1) {
+        if (videoDatas.get(index).getQualityList().size() == 1) {
             return;
         }
         qalityIndex++;
-        qalityIndex = qalityIndex % videoDatas[index].getQualityList().size();
+        qalityIndex = qalityIndex % videoDatas.get(index).getQualityList().size();
         final int qu = qalityIndex;
         highQualityAction.setIndex(qalityIndex);
         notifyActionChanged(highQualityAction);
@@ -256,11 +268,11 @@ public class ExoMediaPlayerWithGlue extends PlaybackBannerControlGlue<ExoPlayerA
                     return;
                 }
                 if (qualityChange != null) {
-                    qualityChange.onQuality(qalityIndex, videoDatas[index].getQualityList().get(qalityIndex));
+                    qualityChange.onQuality(qalityIndex, videoDatas.get(index).getQualityList().get(qalityIndex));
                 }
                 getPlayerAdapter().pause();
                 final long l = getPlayerAdapter().getCurrentPosition();
-                ((ExoPlayerAdapter) getPlayerAdapter()).setDataSource(videoDatas[index].getUrlList().get(qalityIndex), videoDatas[index].isLive());
+                ((ExoPlayerAdapter) getPlayerAdapter()).setDataSource(videoDatas.get(index).getUrlList().get(qalityIndex), videoDatas.get(index).isLive());
                 if (isPrepared()) {
                     seekTo(l);
                     play();
@@ -318,10 +330,20 @@ public class ExoMediaPlayerWithGlue extends PlaybackBannerControlGlue<ExoPlayerA
         }
     }
 
+    public void addVideo(VideoData videoData) {
+        videoDatas.add(videoData);
+    }
+
+    public void setOnTrackChange(OnTrackChange onTrackChange) {
+        this.onTrackChange = onTrackChange;
+    }
 
     public interface OnQualityChange {
         void onQuality(int index, String quality);
     }
 
+    public interface OnTrackChange {
+        void onChange(int old, int current);
+    }
 
 }
