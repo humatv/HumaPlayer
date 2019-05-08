@@ -211,7 +211,11 @@ public class ExoMediaPlayerWithGlue extends PlaybackBannerControlGlue<ExoPlayerA
 
     public void setIndexAndPlay(int index){
         this.index = index;
-        setData();
+        try {
+            setData();
+        }catch (Exception e){
+
+        }
         if (onTrackChange != null) {
             onTrackChange.onChange(index - 1, index);
         }
@@ -222,14 +226,18 @@ public class ExoMediaPlayerWithGlue extends PlaybackBannerControlGlue<ExoPlayerA
     public void next() {
         if (index + 1 < videoDatas.size()) {
             index++;
-            setData();
+            try {
+                setData();
+            }catch (Exception e){
+
+            }
             if (onTrackChange != null) {
                 onTrackChange.onChange(index - 1, index);
             }
         }
     }
 
-    private void setData() {
+    public void setData() {
         getPlayerAdapter().pause();
         qalityIndex = 0;
         for (int i = 0; i < videoDatas.get(index).getQualityList().size(); i++) {
@@ -258,7 +266,11 @@ public class ExoMediaPlayerWithGlue extends PlaybackBannerControlGlue<ExoPlayerA
     public void previous() {
         if (index > 0) {
             index--;
-            setData();
+            try {
+                setData();
+            }catch (Exception e){
+
+            }
             if (onTrackChange != null) {
                 onTrackChange.onChange(index + 1, index);
             }
