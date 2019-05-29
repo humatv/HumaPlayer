@@ -99,6 +99,8 @@ public class ExoMediaPlayerWithGlue extends PlaybackBannerControlGlue<ExoPlayerA
                 getPrimaryActionsAdapter().add(0, previousAction);
                 getPrimaryActionsAdapter().add(getPrimaryActionsAdapter().size(), skipNext);
             }
+            
+            getSecondaryActionsAdapter().add(highQualityAction);
 
             setData();
         }
@@ -205,15 +207,15 @@ public class ExoMediaPlayerWithGlue extends PlaybackBannerControlGlue<ExoPlayerA
         next();
     }
 
-    public void setIndex(int index){
+    public void setIndex(int index) {
         this.index = index;
     }
 
-    public void setIndexAndPlay(int index){
+    public void setIndexAndPlay(int index) {
         this.index = index;
         try {
             setData();
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
         if (onTrackChange != null) {
@@ -228,7 +230,7 @@ public class ExoMediaPlayerWithGlue extends PlaybackBannerControlGlue<ExoPlayerA
             index++;
             try {
                 setData();
-            }catch (Exception e){
+            } catch (Exception e) {
 
             }
             if (onTrackChange != null) {
@@ -252,13 +254,14 @@ public class ExoMediaPlayerWithGlue extends PlaybackBannerControlGlue<ExoPlayerA
         setTitle(videoDatas.get(index).getTitle());
         setSubtitle(videoDatas.get(index).getSubTitle());
 
-        getSecondaryActionsAdapter().remove(highQualityAction);
+//        getSecondaryActionsAdapter().remove(highQualityAction);
         if (videoDatas.get(index).getQualityList().size() > 1) {
 
             highQualityAction.setDrawables(videoDatas.get(index).getQualitiesDrawable(getContext()));
             highQualityAction.setIndex(qalityIndex);
+            getSecondaryActionsAdapter().notifyItemRangeChanged(0, 1);
 //            notifyActionChanged(highQualityAction);
-            getSecondaryActionsAdapter().add(highQualityAction);
+//            getSecondaryActionsAdapter().add(highQualityAction);
         }
     }
 
@@ -268,7 +271,7 @@ public class ExoMediaPlayerWithGlue extends PlaybackBannerControlGlue<ExoPlayerA
             index--;
             try {
                 setData();
-            }catch (Exception e){
+            } catch (Exception e) {
 
             }
             if (onTrackChange != null) {
@@ -374,7 +377,6 @@ public class ExoMediaPlayerWithGlue extends PlaybackBannerControlGlue<ExoPlayerA
     public interface OnTrackChange {
         void onChange(int old, int current);
     }
-
 
 
 }
