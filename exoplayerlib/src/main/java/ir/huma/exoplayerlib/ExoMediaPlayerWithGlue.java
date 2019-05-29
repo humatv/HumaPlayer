@@ -15,6 +15,10 @@
 
 package ir.huma.exoplayerlib;
 
+import android.app.Activity;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.support.v17.leanback.app.VideoSupportFragmentGlueHost;
 import android.support.v17.leanback.media.PlaybackBannerControlGlue;
@@ -22,10 +26,17 @@ import android.support.v17.leanback.media.PlaybackGlue;
 import android.support.v17.leanback.widget.Action;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.PlaybackControlsRow;
+import android.view.View;
+import android.widget.LinearLayout;
+
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import ir.atitec.everythingmanager.manager.FontManager;
+import ir.atitec.everythingmanager.utility.Util;
 
 //import ir.atitec.everythingmanager.manager.FontManager;
 
@@ -39,6 +50,7 @@ public class ExoMediaPlayerWithGlue extends PlaybackBannerControlGlue<ExoPlayerA
     private PlaybackControlsRow.SkipNextAction skipNext;
     private PlaybackControlsRow.SkipPreviousAction previousAction;
     private PlaybackControlsRow.MultiAction highQualityAction;
+
     private PlaybackControlsRow.FastForwardAction forwardAction;
     private PlaybackControlsRow.RewindAction rewindAction;
 
@@ -61,6 +73,7 @@ public class ExoMediaPlayerWithGlue extends PlaybackBannerControlGlue<ExoPlayerA
 //        if (videoData == null || videoData.length == 0) {
 //            return;
 //        }
+
         highQualityAction = new PlaybackControlsRow.MultiAction(5342) {
         };
 
@@ -86,12 +99,11 @@ public class ExoMediaPlayerWithGlue extends PlaybackBannerControlGlue<ExoPlayerA
 
     }
 
-    String fontAddress;
+    Typeface typeface;
 
-    public void setTypeface(String fontAddress) {
-        this.fontAddress = fontAddress;
+    public void setTypeface(Typeface typeface) {
+        this.typeface = typeface;
     }
-
 
     public ExoMediaPlayerWithGlue build() {
         if (getPrimaryActionsAdapter() != null) {
@@ -99,17 +111,19 @@ public class ExoMediaPlayerWithGlue extends PlaybackBannerControlGlue<ExoPlayerA
                 getPrimaryActionsAdapter().add(0, previousAction);
                 getPrimaryActionsAdapter().add(getPrimaryActionsAdapter().size(), skipNext);
             }
-            
-            getSecondaryActionsAdapter().add(highQualityAction);
 
+            getSecondaryActionsAdapter().add(highQualityAction);
             setData();
         }
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-//                FontManager.instance(fontAddress).setTypeface(((Activity)getContext()).findViewById(R.id.lb_details_description_title).getRootView());
-
+                FontManager.instance(typeface).setTypeface(((Activity) getContext()).findViewById(R.id.lb_details_description_title).getRootView());
+                View layout = ((Activity) getContext()).findViewById(R.id.lb_details_description_title);
+                LinearLayout.LayoutParams l = (LinearLayout.LayoutParams) layout.getLayoutParams();
+                l.width = Util.getWindowWidth((Activity) getContext()) - 500;
+                layout.setLayoutParams(l);
             }
         }, 1000);
 
