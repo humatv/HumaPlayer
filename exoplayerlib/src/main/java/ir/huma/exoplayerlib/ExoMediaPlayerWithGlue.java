@@ -64,6 +64,7 @@ public class ExoMediaPlayerWithGlue extends PlaybackBannerControlGlue<ExoPlayerA
     private OnQualityChange qualityChange;
     private String defaultQuality;
     private OnTrackChange onTrackChange;
+    private boolean repeating = false;
 
     public ExoMediaPlayerWithGlue(ExoPlayerAdapter impl, VideoSupportFragmentGlueHost host, String defaultQuality, VideoData... videoData) {
         super(impl.getContext(), new int[]{10}, impl);
@@ -119,7 +120,8 @@ public class ExoMediaPlayerWithGlue extends PlaybackBannerControlGlue<ExoPlayerA
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                FontManager.instance(typeface).setTypeface(((Activity) getContext()).findViewById(R.id.lb_details_description_title).getRootView());
+                if (typeface != null)
+                    FontManager.instance(typeface).setTypeface(((Activity) getContext()).findViewById(R.id.lb_details_description_title).getRootView());
                 View layout = ((Activity) getContext()).findViewById(R.id.lb_details_description_title);
                 LinearLayout.LayoutParams l = (LinearLayout.LayoutParams) layout.getLayoutParams();
                 l.width = Util.getWindowWidth((Activity) getContext()) - 500;
@@ -240,6 +242,9 @@ public class ExoMediaPlayerWithGlue extends PlaybackBannerControlGlue<ExoPlayerA
 
     @Override
     public void next() {
+        if (repeating && index + 1 >= videoDatas.size()) {
+            index = -1;
+        }
         if (index + 1 < videoDatas.size()) {
             index++;
             try {
@@ -392,5 +397,11 @@ public class ExoMediaPlayerWithGlue extends PlaybackBannerControlGlue<ExoPlayerA
         void onChange(int old, int current);
     }
 
+    public boolean isRepeating() {
+        return repeating;
+    }
 
+    public void setRepeating(boolean repeating) {
+        this.repeating = repeating;
+    }
 }

@@ -46,7 +46,7 @@ dependencies {
     implementation "com.mikepenz:iconics-core:3.0.4@aar"
     implementation 'com.mikepenz:google-material-typeface:3.0.1.2.original@aar'
     implementation 'com.github.hamedgramzi:everythingManager:d9b25dbd84'
-} 
+}
 configurations.all {
     resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }

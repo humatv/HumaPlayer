@@ -31,6 +31,7 @@ public class TestVideoPlayerFragment extends VideoSupportFragment {
                 new VideoData().setTitle("خرکده").setSubTitle("آلودگی هوا").addData("https://hw6.cdn.asset.aparat.com/aparat-video/9fc756da8d1d652c931319f7479a8a5312948926-480p__42291.mp4", "480p").addData("https://hw6.cdn.asset.aparat.com/aparat-video/9fc756da8d1d652c931319f7479a8a5312948926-360p__42291.mp4", "360p").addData("https://hw6.cdn.asset.aparat.com/aparat-video/9fc756da8d1d652c931319f7479a8a5312948926-360p__42291.mp4", "240p"),
                 new VideoData().setTitle("hello").setSubTitle("hello sub").setLive(true).addData(URL, "test"),
                 new VideoData().setTitle("الکی").setSubTitle("توضیحات زیرین الکی").addData(URL2, "720p"));
+        mMediaPlayerGlue.setRepeating(true);
         mMediaPlayerGlue.build();
     }
 
