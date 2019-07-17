@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="videoTheme" parent="@style/Theme.Leanback">
+        <item name="android:colorPrimary">@color/defaultBrandColor</item>
+
+        <!--<item name="android:colorAccent">@color/colorAccent</item>-->
+
+    </style>
+
+</resources>

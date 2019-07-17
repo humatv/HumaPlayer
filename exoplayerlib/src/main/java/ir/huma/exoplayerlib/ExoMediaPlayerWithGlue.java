@@ -26,10 +26,16 @@ import android.support.v17.leanback.media.PlaybackGlue;
 import android.support.v17.leanback.widget.Action;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.PlaybackControlsRow;
+import android.support.v17.leanback.widget.PlaybackControlsRowPresenter;
+import android.support.v4.content.ContextCompat;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,7 +61,7 @@ public class ExoMediaPlayerWithGlue extends PlaybackBannerControlGlue<ExoPlayerA
     private PlaybackControlsRow.RewindAction rewindAction;
 
     private List<VideoData> videoDatas = new ArrayList<>();
-
+    private PlaybackControlsRow.PictureInPictureAction pictureInPictureAction;
     private int index = 0;
     private int qalityIndex = 0;
     ArrayObjectAdapter secondaryAdapter;
@@ -81,7 +87,9 @@ public class ExoMediaPlayerWithGlue extends PlaybackBannerControlGlue<ExoPlayerA
         previousAction = new PlaybackControlsRow.SkipPreviousAction(getContext());
         skipNext = new PlaybackControlsRow.SkipNextAction(getContext());
         forwardAction = new PlaybackControlsRow.FastForwardAction(getContext());
+        forwardAction.setDrawables(new Drawable[]{new IconicsDrawable(getContext()).icon(GoogleMaterial.Icon.gmd_forward_10).color(Color.WHITE).sizeDp(48)});
         rewindAction = new PlaybackControlsRow.RewindAction(getContext());
+        rewindAction.setDrawables(new Drawable[]{new IconicsDrawable(getContext()).icon(GoogleMaterial.Icon.gmd_replay_10).color(Color.WHITE).sizeDp(48)});
 
 //        setSeekProvider(new PlaybackSeekDataProvider());
         if (host != null)
@@ -97,6 +105,10 @@ public class ExoMediaPlayerWithGlue extends PlaybackBannerControlGlue<ExoPlayerA
 //                view2.setPadding(0,0,margin,0);
 //            }
 //        },2000);
+
+
+        ((PlaybackControlsRowPresenter) getPlaybackRowPresenter()).setProgressColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
+        ((PlaybackControlsRowPresenter) getPlaybackRowPresenter()).setBackgroundColor(ContextCompat.getColor(getContext(), R.color.defaultBrandColor));
 
     }
 
@@ -123,11 +135,22 @@ public class ExoMediaPlayerWithGlue extends PlaybackBannerControlGlue<ExoPlayerA
                 if (typeface != null)
                     FontManager.instance(typeface).setTypeface(((Activity) getContext()).findViewById(R.id.lb_details_description_title).getRootView());
                 View layout = ((Activity) getContext()).findViewById(R.id.lb_details_description_title);
+                View layout2 = ((Activity) getContext()).findViewById(R.id.lb_details_description_subtitle);
+                LinearLayout ll = (LinearLayout) layout.getParent();
+                FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) ll.getLayoutParams();
+                params.width = Util.getWindowWidth((Activity) getContext()) - 500;
+//                params.gravity = Gravity.RIGHT;
+                ll.setLayoutParams(params);
                 LinearLayout.LayoutParams l = (LinearLayout.LayoutParams) layout.getLayoutParams();
-                l.width = Util.getWindowWidth((Activity) getContext()) - 500;
+                l.gravity = Gravity.RIGHT;
                 layout.setLayoutParams(l);
+
+                l = (LinearLayout.LayoutParams) layout2.getLayoutParams();
+                l.gravity = Gravity.RIGHT;
+                layout2.setLayoutParams(l);
+
             }
-        }, 1000);
+        }, 400);
 
         return this;
     }
