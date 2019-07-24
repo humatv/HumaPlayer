@@ -283,7 +283,7 @@ public class ExoMediaPlayerWithGlue extends PlaybackBannerControlGlue<ExoPlayerA
 
     public void setData() {
         getPlayerAdapter().pause();
-        qalityIndex = 0;
+        qalityIndex = videoDatas.get(index).getQualityList().size() > 1 ? 1 : 0;
         for (int i = 0; i < videoDatas.get(index).getQualityList().size(); i++) {
             if (videoDatas.get(index).getQualityList().get(i).equalsIgnoreCase(defaultQuality)) {
                 qalityIndex = i;
