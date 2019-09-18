@@ -23,6 +23,7 @@ import android.os.Handler;
 import android.support.v17.leanback.app.VideoSupportFragmentGlueHost;
 import android.support.v17.leanback.media.PlaybackBannerControlGlue;
 import android.support.v17.leanback.media.PlaybackGlue;
+import android.support.v17.leanback.media.PlaybackGlueHost;
 import android.support.v17.leanback.widget.Action;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.PlaybackControlsRow;
@@ -107,9 +108,6 @@ public class ExoMediaPlayerWithGlue extends PlaybackBannerControlGlue<ExoPlayerA
 //        },2000);
 
 
-        ((PlaybackControlsRowPresenter) getPlaybackRowPresenter()).setProgressColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
-        ((PlaybackControlsRowPresenter) getPlaybackRowPresenter()).setBackgroundColor(ContextCompat.getColor(getContext(), R.color.defaultBrandColor));
-
     }
 
     Typeface typeface;
@@ -175,6 +173,13 @@ public class ExoMediaPlayerWithGlue extends PlaybackBannerControlGlue<ExoPlayerA
         adapter.add(adapter.size(), forwardAction);
     }
 
+
+    @Override
+    protected void onAttachedToHost(PlaybackGlueHost host) {
+        super.onAttachedToHost(host);
+        ((PlaybackControlsRowPresenter) getPlaybackRowPresenter()).setProgressColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
+        ((PlaybackControlsRowPresenter) getPlaybackRowPresenter()).setBackgroundColor(ContextCompat.getColor(getContext(), R.color.defaultBrandColor));
+    }
 
     @Override
     public void onActionClicked(Action action) {
