@@ -1,27 +1,14 @@
 package ir.huma.humaleanbackvideolib;
 
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
-import android.support.v17.leanback.app.VideoSupportFragment;
-import android.support.v17.leanback.app.VideoSupportFragmentGlueHost;
-import android.support.v17.leanback.widget.PlaybackControlsRowPresenter;
-import android.support.v7.view.ContextThemeWrapper;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.ProgressBar;
-
-import java.lang.reflect.Field;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.leanback.app.VideoSupportFragment;
+import androidx.leanback.app.VideoSupportFragmentGlueHost;
+import androidx.leanback.widget.PlaybackControlsRowPresenter;
+import androidx.appcompat.view.ContextThemeWrapper;
 
 import ir.huma.exoplayerlib.ExoMediaPlayerWithGlue;
 import ir.huma.exoplayerlib.ExoPlayerAdapter;

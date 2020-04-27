@@ -20,23 +20,24 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
-import android.support.v17.leanback.app.VideoSupportFragmentGlueHost;
-import android.support.v17.leanback.media.PlaybackBannerControlGlue;
-import android.support.v17.leanback.media.PlaybackGlue;
-import android.support.v17.leanback.media.PlaybackGlueHost;
-import android.support.v17.leanback.widget.Action;
-import android.support.v17.leanback.widget.ArrayObjectAdapter;
-import android.support.v17.leanback.widget.PlaybackControlsRow;
-import android.support.v17.leanback.widget.PlaybackControlsRowPresenter;
-import android.support.v4.content.ContextCompat;
+import androidx.leanback.app.VideoSupportFragmentGlueHost;
+import androidx.leanback.media.PlaybackBannerControlGlue;
+import androidx.leanback.media.PlaybackGlue;
+import androidx.leanback.media.PlaybackGlueHost;
+import androidx.leanback.widget.Action;
+import androidx.leanback.widget.ArrayObjectAdapter;
+import androidx.leanback.widget.PlaybackControlsRow;
+import androidx.leanback.widget.PlaybackControlsRowPresenter;
+import androidx.core.content.ContextCompat;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.IconicsColor;
 import com.mikepenz.iconics.IconicsDrawable;
+import com.mikepenz.iconics.IconicsSize;
+import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -88,9 +89,10 @@ public class ExoMediaPlayerWithGlue extends PlaybackBannerControlGlue<ExoPlayerA
         previousAction = new PlaybackControlsRow.SkipPreviousAction(getContext());
         skipNext = new PlaybackControlsRow.SkipNextAction(getContext());
         forwardAction = new PlaybackControlsRow.FastForwardAction(getContext());
-        forwardAction.setDrawables(new Drawable[]{new IconicsDrawable(getContext()).icon(GoogleMaterial.Icon.gmd_forward_10).color(Color.WHITE).sizeDp(48)});
+        Drawable d = new IconicsDrawable(getContext()).icon(GoogleMaterial.Icon.gmd_forward_10).color(IconicsColor.colorInt(Color.WHITE)).size(IconicsSize.dp(48));
+        forwardAction.setDrawables(new Drawable[]{d});
         rewindAction = new PlaybackControlsRow.RewindAction(getContext());
-        rewindAction.setDrawables(new Drawable[]{new IconicsDrawable(getContext()).icon(GoogleMaterial.Icon.gmd_replay_10).color(Color.WHITE).sizeDp(48)});
+        rewindAction.setDrawables(new Drawable[]{new IconicsDrawable(getContext()).icon(GoogleMaterial.Icon.gmd_replay_10).color(IconicsColor.colorInt(Color.WHITE)).size(IconicsSize.dp(48))});
 
 //        setSeekProvider(new PlaybackSeekDataProvider());
         if (host != null)

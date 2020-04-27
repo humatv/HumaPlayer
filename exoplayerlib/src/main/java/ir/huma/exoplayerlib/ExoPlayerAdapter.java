@@ -4,9 +4,9 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Handler;
-import android.support.v17.leanback.media.PlaybackGlueHost;
-import android.support.v17.leanback.media.PlayerAdapter;
-import android.support.v17.leanback.media.SurfaceHolderGlueHost;
+import androidx.leanback.media.PlaybackGlueHost;
+import androidx.leanback.media.PlayerAdapter;
+import androidx.leanback.media.SurfaceHolderGlueHost;
 import android.view.SurfaceHolder;
 
 import com.google.android.exoplayer2.C;
@@ -15,6 +15,7 @@ import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.PlaybackParameters;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
@@ -30,7 +31,7 @@ import com.google.android.exoplayer2.util.Util;
 /**
  * This implementation extends the {@link PlayerAdapter} with a {@link SimpleExoPlayer}.
  */
-public class ExoPlayerAdapter extends PlayerAdapter implements ExoPlayer.EventListener {
+public class ExoPlayerAdapter extends PlayerAdapter implements Player.EventListener {
 
     Context mContext;
     final SimpleExoPlayer mPlayer;
@@ -60,7 +61,7 @@ public class ExoPlayerAdapter extends PlayerAdapter implements ExoPlayer.EventLi
                 new DefaultTrackSelector(),
                 new DefaultLoadControl());
         mPlayer.addListener(this);
-        setAudioStreamType(AudioManager.USE_DEFAULT_STREAM_TYPE);
+        setAudioStreamType(C.STREAM_TYPE_USE_DEFAULT);
     }
 
     @Override
@@ -350,6 +351,16 @@ public class ExoPlayerAdapter extends PlayerAdapter implements ExoPlayer.EventLi
     }
 
     @Override
+    public void onRepeatModeChanged(int repeatMode) {
+
+    }
+
+    @Override
+    public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
+
+    }
+
+    @Override
     public void onPlayerError(ExoPlaybackException error) {
         getCallback().onError(ExoPlayerAdapter.this, error.type,
                 mContext.getString(R.string.lb_media_player_error,
@@ -358,23 +369,33 @@ public class ExoPlayerAdapter extends PlayerAdapter implements ExoPlayer.EventLi
     }
 
     @Override
-    public void onLoadingChanged(boolean isLoading) {
+    public void onPositionDiscontinuity(int reason) {
+
     }
 
     @Override
-    public void onTimelineChanged(Timeline timeline, Object manifest) {
+    public void onLoadingChanged(boolean isLoading) {
+    }
+
+
+
+    @Override
+    public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
+
     }
 
     @Override
     public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
     }
 
-    @Override
-    public void onPositionDiscontinuity() {
-    }
 
     @Override
     public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
+
+    }
+
+    @Override
+    public void onSeekProcessed() {
 
     }
 
