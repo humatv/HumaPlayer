@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<?xml version="1.0" encoding="utf-8"?><!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
 <!--android:layout_width="match_parent"-->
 <!--android:layout_height="match_parent">-->
 
@@ -10,9 +9,13 @@
 <!--</RelativeLayout>-->
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/videoFragment"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/videoFragment">
+    android:layout_height="match_parent">
 
+    <ir.huma.exoplayerlib.MyExoPlayerManager
+        android:id="@+id/myExoPlayer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </FrameLayout>

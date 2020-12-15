@@ -1,4 +1,4 @@
-package ir.huma.exoplayerlib;
+package ir.huma.exoplayerlib.util;
 
 import android.content.res.Resources;
 import android.graphics.Canvas;
@@ -7,6 +7,7 @@ import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.util.TypedValue;
 
@@ -23,6 +24,7 @@ public class TextDrawable extends Drawable {
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setColor(DEFAULT_COLOR);
         mPaint.setTextAlign(Align.CENTER);
+        mPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
         float textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,
                 DEFAULT_TEXTSIZE, res.getDisplayMetrics());
         mPaint.setTextSize(textSize);

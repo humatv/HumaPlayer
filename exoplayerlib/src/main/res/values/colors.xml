@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorAccent">#F44336</color>
-    <color name="defaultBrandColor">#8F141414</color>
-    <color name="lb_control_button_color">@color/colorAccent</color>
-
+    <color name="huma_player_Color">@color/colorAccent</color>
+    <color name="huma_player_visualizer_Color">#ffffff</color>
 </resources>

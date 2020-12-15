@@ -9,11 +9,4 @@
 
     </style>
 
-    <style name="Theme.Example.Leanback" parent="Theme.Leanback">
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:colorAccent">@color/colorAccent</item>
-        <!--<item name="android:colorPrimary">@color/colorPrimary</item>-->
-    </style>
-
-
 </resources>
