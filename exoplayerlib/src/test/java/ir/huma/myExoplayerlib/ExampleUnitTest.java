@@ -1,4 +1,4 @@
-package ir.huma.exoplayerlib;
+package ir.huma.myExoplayerlib;
 
 import org.junit.Test;
 

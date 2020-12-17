@@ -1,4 +1,4 @@
-package ir.huma.exoplayerlib
+package ir.huma.myExoplayerlib
 
 import android.content.Context
 import android.graphics.Typeface
@@ -10,7 +10,7 @@ import android.widget.TextView
 import com.google.android.exoplayer2.Format
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.util.MimeTypes
-import ir.huma.exoplayerlib.util.MyViewHolder
+import ir.huma.myExoplayerlib.util.MyViewHolder
 
 class MediaInfo {
     var title: String? = null

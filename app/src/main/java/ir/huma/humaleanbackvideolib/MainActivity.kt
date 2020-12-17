@@ -1,11 +1,10 @@
 package ir.huma.humaleanbackvideolib
 
 import android.graphics.Typeface
-import android.net.sip.SipSession
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
-import ir.huma.exoplayerlib.MediaInfo
-import ir.huma.exoplayerlib.MyExoPlayerManager
+import ir.huma.myExoplayerlib.MediaInfo
+import ir.huma.myExoplayerlib.MyExoPlayerManager
 
 class MainActivity : FragmentActivity() {
     lateinit var myExoPlayer: MyExoPlayerManager

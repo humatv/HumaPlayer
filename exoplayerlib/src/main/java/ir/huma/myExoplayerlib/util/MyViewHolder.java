@@ -1,4 +1,4 @@
-package ir.huma.exoplayerlib.util;
+package ir.huma.myExoplayerlib.util;
 
 import android.content.Context;
 import android.view.View;

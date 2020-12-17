@@ -1,4 +1,4 @@
-package ir.huma.exoplayerlib
+package ir.huma.myExoplayerlib
 
 import android.content.Context
 import android.graphics.Color
@@ -32,9 +32,9 @@ import com.google.android.exoplayer2.util.Util
 import com.google.android.exoplayer2.video.VideoListener
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
-import ir.huma.exoplayerlib.util.MyAdapter
-import ir.huma.exoplayerlib.util.MyPlayerView
-import ir.huma.exoplayerlib.util.TextDrawable
+import ir.huma.myExoplayerlib.util.MyAdapter
+import ir.huma.myExoplayerlib.util.MyPlayerView
+import ir.huma.myExoplayerlib.util.TextDrawable
 import java.util.*
 import kotlin.collections.ArrayList
 

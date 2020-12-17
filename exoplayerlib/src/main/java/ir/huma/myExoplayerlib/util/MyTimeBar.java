@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ir.huma.exoplayerlib.util;
+package ir.huma.myExoplayerlib.util;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
@@ -38,7 +38,7 @@ import android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction;
 import androidx.annotation.ColorInt;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import ir.huma.exoplayerlib.R;
+import ir.huma.myExoplayerlib.R;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ui.TimeBar;

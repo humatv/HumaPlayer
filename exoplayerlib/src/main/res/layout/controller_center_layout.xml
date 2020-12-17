@@ -42,7 +42,7 @@
                 android:textColor="@color/exo_white"
                 android:textSize="26sp" />
 
-            <ir.huma.exoplayerlib.util.TextViewJustify
+            <ir.huma.myExoplayerlib.util.TextViewJustify
                 android:id="@+id/descriptionTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -116,7 +116,7 @@
             android:textSize="14sp"
             android:textStyle="bold" />
 
-        <ir.huma.exoplayerlib.util.MyTimeBar
+        <ir.huma.myExoplayerlib.util.MyTimeBar
             android:id="@+id/exo_progress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

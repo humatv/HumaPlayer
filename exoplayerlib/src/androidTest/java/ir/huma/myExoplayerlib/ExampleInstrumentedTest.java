@@ -1,4 +1,4 @@
-package ir.huma.exoplayerlib;
+package ir.huma.myExoplayerlib;
 
 import android.content.Context;
 import androidx.test.platform.app.InstrumentationRegistry;
