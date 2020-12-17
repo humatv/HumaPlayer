@@ -1,6 +1,7 @@
 package ir.huma.humaleanbackvideolib
 
 import android.graphics.Typeface
+import android.net.sip.SipSession
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import ir.huma.exoplayerlib.MediaInfo
@@ -13,9 +14,13 @@ class MainActivity : FragmentActivity() {
         setContentView(R.layout.activity_main)
         myExoPlayer = findViewById(R.id.myExoPlayer)
 
-        myExoPlayer.addMediaItem(MediaInfo().setTitle("تهران عاشق")
+        myExoPlayer.addMediaItem(
+                MediaInfo().setTitle("تهران عاشق")
                 .setLogoUrl("https://music-fa.com/wp-content/uploads/2020/12/Mohammad-Motamedi-Tehrane-Ashegh-Cover-Music-fa.com_-1.jpg")
-                .setBackgroundUrl("https://music-fa.com/wp-content/uploads/2020/12/Mohammad-Motamedi-Tehrane-Ashegh-Cover-Music-fa.com_-1.jpg").setDescription("آلبوم تهران عاشق محمد معتمدی به صورت تکی و یکجا").addMediaQuality("128", "https://dls.music-fa.com/tagdl/99/Mohammad%20Motamedi%20-%20Gole%20Sang%20(320).mp3"))
+                .setBackgroundUrl("https://music-fa.com/wp-content/uploads/2020/12/Mohammad-Motamedi-Tehrane-Ashegh-Cover-Music-fa.com_-1.jpg")
+                .setDescription("آلبوم تهران عاشق محمد معتمدی به صورت تکی و یکجا")
+                .addMediaQuality("128", "https://dls.music-fa.com/tagdl/99/Mohammad%20Motamedi%20-%20Gole%20Sang%20(320).mp3")
+        )
 
         myExoPlayer.addMediaItem(MediaInfo().setTitle("دیرین دیرین").setDescription("یادتون باشه ما اولین کسی بودیم که یلدا رو پیشاپیش بهتون تبریک گفتیم.")
                 .setLogoUrl("https://cdn.isna.ir/d/2017/05/03/3/57478643.jpg?ts=1498045331768")
@@ -26,7 +31,8 @@ class MainActivity : FragmentActivity() {
                 .addSubtitle("https://cloudspace.huma.ir/s/68q8tKu1I9XTiXg/download", "fa")
                 .addSubtitle("https://cloudspace.huma.ir/s/ruRcEJ12X3806Df/download", "en")
         )
-        myExoPlayer.addMediaItem(MediaInfo().setTitle("طرز تهیه نان سیمیت").setDescription("آرد، ۵۰۰ گرم\n" +
+        myExoPlayer.addMediaItem(MediaInfo().setTitle("طرز تهیه نان سیمیت")
+                .setDescription("آرد، ۵۰۰ گرم\n" +
                 "خمیرمایه فوری، ۱ قاشق چای\u200Cخوری\n" +
                 "شکر، ۱ قاشق غذاخوری\n" +
                 "روغن مایع، ۳ قاشق غذاخوری\n" +
@@ -44,7 +50,11 @@ class MainActivity : FragmentActivity() {
                 .addMediaQuality("720p", "https://hw18.cdn.asset.aparat.com/aparat-video/4ed9428eeb3ee5cde21cc2878860215627721511-720p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjBjYWJhN2NlYTE2YjY5MmYzMGZmMjU4MWNlYzE3NGYxIiwiZXhwIjoxNjA3NTM3NTAwLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.0CX-RXwDPnd8bsL1X3JzWBVoUuI-Ai-xbOswffh6CMg")
                 .setCurrentQuality("360p")
         )
-        myExoPlayer.addMediaItem(MediaInfo().setTitle("تست پخش زنده").setLive(true).addMediaQuality("", "http://demo.unified-streaming.com/video/tears-of-steel/tears-of-steel.ism/.m3u8"))
+        myExoPlayer.addMediaItem(
+                MediaInfo().setTitle("تست پخش زنده").setLive(true).addMediaQuality("", "http://demo.unified-streaming.com/video/tears-of-steel/tears-of-steel.ism/.m3u8")
+        )
+
+
         myExoPlayer.typeface = Typeface.createFromAsset(assets, "fonts/BYekan.ttf")
         myExoPlayer.start()
     }
