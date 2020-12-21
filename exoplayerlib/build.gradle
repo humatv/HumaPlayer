@@ -3,13 +3,13 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 26
 
 
 
     defaultConfig {
         minSdkVersion 22
-        targetSdkVersion 29
+        targetSdkVersion 20
         versionCode 1
         versionName "1.0"
 
@@ -33,9 +33,9 @@ android {
 
 
 dependencies {
-    implementation 'com.google.android.exoplayer:exoplayer-core:2.12.0'
-    implementation 'com.google.android.exoplayer:exoplayer-ui:2.12.0'
-    implementation 'com.google.android.exoplayer:exoplayer-hls:2.12.0'
+    implementation 'com.google.android.exoplayer:exoplayer:2.12.0'
+//    implementation 'com.google.android.exoplayer:exoplayer-ui:2.12.0'
+//    implementation 'com.google.android.exoplayer:exoplayer-hls:2.12.0'
     implementation( 'com.chibde:audiovisualizer:2.2.0')
 
     implementation ('com.squareup.picasso:picasso:2.71828'){
