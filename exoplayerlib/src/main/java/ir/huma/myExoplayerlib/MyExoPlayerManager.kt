@@ -92,7 +92,7 @@ public class MyExoPlayerManager : FrameLayout {
     private lateinit var backImageView: ImageView
     private lateinit var subtitleButon: ImageView
 
-    private var listener: Player.EventListener? = null
+    var listener: Player.EventListener? = null
         set(value) {
             if (value != null && player != null)
                 player.addListener(value!!)
