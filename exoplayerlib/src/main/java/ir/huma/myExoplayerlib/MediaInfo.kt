@@ -83,6 +83,12 @@ class MediaInfo {
         return this
     }
 
+    fun setId(id: String): MediaInfo {
+        this.id = id
+        return this
+    }
+
+
     override fun equals(other: Any?): Boolean {
         if (!(other is MediaInfo)) {
             return false
