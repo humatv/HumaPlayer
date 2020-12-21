@@ -91,6 +91,7 @@ public class MyExoPlayerManager : FrameLayout {
     private lateinit var qualityButton: ImageView
     private lateinit var backImageView: ImageView
     private lateinit var subtitleButon: ImageView
+
     private var listener: Player.EventListener? = null
         set(value) {
             if (value != null && player != null)
@@ -98,7 +99,8 @@ public class MyExoPlayerManager : FrameLayout {
         }
 
     var currentIndex = 0
-    private var mediaInfoes = ArrayList<MediaInfo>()
+    var mediaInfoes = ArrayList<MediaInfo>()
+        private set
     private var tempQuality: String? = null
         get() {
             if (field == null && mediaInfoes != null && mediaInfoes.size > 0) {
@@ -287,11 +289,8 @@ public class MyExoPlayerManager : FrameLayout {
         player.stop()
         player.clearMediaItems()
         mediaInfoes.get(player.currentWindowIndex).getMediaItem(tempQuality!!)?.let {
-//                                buildMediaSource(item)?.let { player.addMediaSource(it) }
             for (item in mediaInfoes) {
                 buildMediaSource(item)?.let { player.addMediaSource(it) }
-//
-//                item.getMediaItem(tempQuality)?.let { player.addMediaItem(it) }
             }
             player.seekToDefaultPosition(current)
         }
@@ -303,18 +302,26 @@ public class MyExoPlayerManager : FrameLayout {
 
     fun addMediaItem(index: Int, mediaInfo: MediaInfo) {
         mediaInfoes.add(index, mediaInfo)
+        buildMediaSource(mediaInfo)?.let { player.addMediaSource(index, it) }
     }
 
     fun addMediaItem(mediaInfo: MediaInfo) {
         mediaInfoes.add(mediaInfo)
+        buildMediaSource(mediaInfo)?.let { player.addMediaSource(it) }
     }
 
     fun addMediaItems(index: Int, mediaInfoes: List<MediaInfo>) {
         this.mediaInfoes.addAll(index, mediaInfoes)
+        for (item in mediaInfoes) {
+            buildMediaSource(item)?.let { player.addMediaSource(index, it) }
+        }
     }
 
     fun addMediaItems(mediaInfoes: List<MediaInfo>) {
         this.mediaInfoes.addAll(mediaInfoes)
+        for (item in mediaInfoes) {
+            buildMediaSource(item)?.let { player.addMediaSource(it) }
+        }
     }
 
     private fun buildMediaSource(mediaInfo: MediaInfo): MediaSource? {
@@ -379,9 +386,6 @@ public class MyExoPlayerManager : FrameLayout {
     }
 
     fun start() {
-        for (item in mediaInfoes) {
-            buildMediaSource(item)?.let { player.addMediaSource(it) }
-        }
         player.seekToDefaultPosition(currentIndex)
         subtitleView!!.setStyle(CaptionStyleCompat(Color.WHITE, Color.TRANSPARENT, Color.TRANSPARENT, CaptionStyleCompat.EDGE_TYPE_OUTLINE, Color.BLACK, typeface))
         player.prepare()
