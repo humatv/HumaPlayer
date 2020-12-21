@@ -91,8 +91,13 @@ public class MyExoPlayerManager : FrameLayout {
     private lateinit var qualityButton: ImageView
     private lateinit var backImageView: ImageView
     private lateinit var subtitleButon: ImageView
+    private var listener: Player.EventListener? = null
+        set(value) {
+            if (value != null && player != null)
+                player.addListener(value!!)
+        }
 
-    //    private var currentIndex = 0
+    var currentIndex = 0
     private var mediaInfoes = ArrayList<MediaInfo>()
     private var tempQuality: String? = null
         get() {
@@ -153,6 +158,7 @@ public class MyExoPlayerManager : FrameLayout {
             }
 
             override fun onTracksChanged(trackGroups: TrackGroupArray, trackSelections: TrackSelectionArray) {
+                currentIndex = player.currentWindowIndex
 //                super.onTracksChanged(trackGroups, trackSelections)
                 if (!qualityChanging) {
 
@@ -376,6 +382,7 @@ public class MyExoPlayerManager : FrameLayout {
         for (item in mediaInfoes) {
             buildMediaSource(item)?.let { player.addMediaSource(it) }
         }
+        player.seekToDefaultPosition(currentIndex)
         subtitleView!!.setStyle(CaptionStyleCompat(Color.WHITE, Color.TRANSPARENT, Color.TRANSPARENT, CaptionStyleCompat.EDGE_TYPE_OUTLINE, Color.BLACK, typeface))
         player.prepare()
         player.play()

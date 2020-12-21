@@ -13,6 +13,7 @@ import com.google.android.exoplayer2.util.MimeTypes
 import ir.huma.myExoplayerlib.util.MyViewHolder
 
 class MediaInfo {
+    var id: String? = null
     var title: String? = null
     var description: String? = null
     var logoUrl: String? = null
@@ -33,7 +34,7 @@ class MediaInfo {
                 field = value
             }
         }
-    var isLive : Boolean = false
+    var isLive: Boolean = false
     var currentQuality: String? = null
         private set
         get() {
@@ -80,6 +81,21 @@ class MediaInfo {
     fun setLive(live: Boolean): MediaInfo {
         isLive = live
         return this
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (!(other is MediaInfo)) {
+            return false
+        }
+        if (other.id != null && id != null && other.id == id) {
+            return true
+        }
+        if (other.mediaQualities != null && mediaQualities != null && other.mediaQualities.size == mediaQualities.size) {
+            if (other.mediaQualities.values.toList().get(0) == mediaQualities.values.toList().get(0)) {
+                return true
+            }
+        }
+        return super.equals(other)
     }
 
     fun addSubtitle(subtitleUrl: String, language: String): MediaInfo {
@@ -150,14 +166,10 @@ class MediaInfo {
         return null;
     }
 
-    public class MyHolder(context: Context?, view: View?, arrayAdapter: ArrayAdapter<String>?) : MyViewHolder<String>(context, view, arrayAdapter) {
-//        override fun fill(t: MediaItem.Subtitle?, pos: Int) {
-//
-//        }
+    class MyHolder(context: Context?, view: View?, arrayAdapter: ArrayAdapter<String>?) : MyViewHolder<String>(context, view, arrayAdapter) {
+
 
         override fun fill(t: String?, pos: Int) {
-//            val loc = Locale(t!!.language)
-//            val name: String = loc.getDisplayLanguage(loc)
             val textView = view.findViewById<TextView>(R.id.textView)
             textView.setText(t)
 
@@ -165,8 +177,8 @@ class MediaInfo {
                 if (pos == objects[0]) {
                     view.findViewById<ImageView>(R.id.imageView).visibility = View.VISIBLE
                 }
-                if(objects.size >1)
-                textView.setTypeface(objects[1] as Typeface?)
+                if (objects.size > 1)
+                    textView.setTypeface(objects[1] as Typeface?)
             }
         }
     }
