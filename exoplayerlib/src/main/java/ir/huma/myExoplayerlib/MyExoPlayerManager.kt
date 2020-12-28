@@ -405,6 +405,14 @@ public class MyExoPlayerManager : FrameLayout {
         player.stop()
     }
 
+    fun showController(){
+        playerView?.showController()
+    }
+
+    fun hideController(){
+        playerView?.hideController()
+    }
+
     fun release() {
         stop()
         player.release()
