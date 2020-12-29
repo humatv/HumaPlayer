@@ -200,7 +200,11 @@ public class MyExoPlayerManager : FrameLayout {
         player.addAudioListener(object : AudioListener {
             override fun onAudioSessionId(audioSessionId: Int) {
 //                if (!hasVideo) {
-                visualizer.setPlayer(audioSessionId);
+                try {
+                    visualizer.setPlayer(audioSessionId);
+                }catch (e : Exception){
+
+                }
 //                    descriptionTextView.visibility = View.GONE
 //                }
 //                Log.d("exo_player", "addAudioListener " + player.audioFormat + player.videoFormat)
