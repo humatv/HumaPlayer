@@ -336,7 +336,7 @@ public class MyExoPlayerManager : FrameLayout {
     private fun buildMediaSource(mediaInfo: MediaInfo): MediaSource? {
 
 
-        val dataSourceFactory = if(mediaInfo.isMediaLocal(tempQuality!!)) dataSourceFactoryHttp else dataSourceFactoryFile
+        val dataSourceFactory = if(!mediaInfo.isMediaLocal(tempQuality!!)) dataSourceFactoryHttp else dataSourceFactoryFile
         var mediaSource: MediaSource
         if (!mediaInfo.isLive)
             mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(mediaInfo.getMediaItem(tempQuality!!)!!)
