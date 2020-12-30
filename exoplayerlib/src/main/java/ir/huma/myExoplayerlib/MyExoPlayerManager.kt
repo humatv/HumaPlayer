@@ -27,6 +27,7 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.ui.SubtitleView
 import com.google.android.exoplayer2.upstream.DataSource
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import com.google.android.exoplayer2.video.VideoListener
@@ -97,7 +98,8 @@ public class MyExoPlayerManager : FrameLayout {
             if (value != null && player != null)
                 player.addListener(value!!)
         }
-
+    lateinit var dataSourceFactoryHttp : DataSource.Factory
+    lateinit var dataSourceFactoryFile : DataSource.Factory
     var currentIndex = 0
     var mediaInfoes = ArrayList<MediaInfo>()
         private set
@@ -137,6 +139,9 @@ public class MyExoPlayerManager : FrameLayout {
         middlePaint.setColor(visualizerColor)
         field.set(visualizer, middlePaint)
         subtitleView = playerView.subtitleView
+
+       dataSourceFactoryHttp = DefaultHttpDataSourceFactory(Util.getUserAgent(context, ""))
+       dataSourceFactoryFile = DefaultDataSourceFactory(context)
 
         player.addListener(object : Player.EventListener {
             override fun onPlaybackStateChanged(state: Int) {
@@ -330,7 +335,8 @@ public class MyExoPlayerManager : FrameLayout {
 
     private fun buildMediaSource(mediaInfo: MediaInfo): MediaSource? {
 
-        val dataSourceFactory: DataSource.Factory = DefaultHttpDataSourceFactory(Util.getUserAgent(context, ""))
+
+        val dataSourceFactory = if(mediaInfo.isMediaLocal(tempQuality!!)) dataSourceFactoryHttp else dataSourceFactoryFile
         var mediaSource: MediaSource
         if (!mediaInfo.isLive)
             mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(mediaInfo.getMediaItem(tempQuality!!)!!)

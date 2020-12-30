@@ -138,6 +138,12 @@ class MediaInfo {
         return mediaItem;
     }
 
+    fun isMediaLocal(quality: String?): Boolean {
+        if (Uri.parse(mediaQualities.get(quality)?.toString()).scheme == "file")
+            return true
+        return false
+    }
+
     fun getMediaItem(): MediaItem? {
         if (mediaItem == null) {
             if (mediaQualities.containsKey(currentQuality)) {
