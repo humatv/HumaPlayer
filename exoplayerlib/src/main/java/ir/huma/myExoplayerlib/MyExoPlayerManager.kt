@@ -21,6 +21,7 @@ import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.audio.AudioListener
 import com.google.android.exoplayer2.source.*
+import com.google.android.exoplayer2.source.dash.DashMediaSource
 import com.google.android.exoplayer2.source.hls.HlsMediaSource
 import com.google.android.exoplayer2.text.CaptionStyleCompat
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
@@ -338,8 +339,13 @@ public class MyExoPlayerManager : FrameLayout {
 
         val dataSourceFactory = if(!mediaInfo.isMediaLocal(tempQuality!!)) dataSourceFactoryHttp else dataSourceFactoryFile
         var mediaSource: MediaSource
-        if (!mediaInfo.isLive)
-            mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(mediaInfo.getMediaItem(tempQuality!!)!!)
+        if (!mediaInfo.isLive){
+            if(!mediaInfo.isMediaLocal(tempQuality!!)){
+                mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(mediaInfo.getMediaItem(tempQuality!!)!!)
+            }  else {
+                mediaSource = DashMediaSource.Factory(dataSourceFactory).createMediaSource(mediaInfo.getMediaItem(tempQuality!!)!!)
+            }
+        }
         else
             mediaSource = HlsMediaSource.Factory(dataSourceFactory).createMediaSource(mediaInfo.getMediaItem(tempQuality!!)!!)
 
