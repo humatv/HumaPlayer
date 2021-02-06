@@ -20,6 +20,8 @@ class MediaInfo {
     var backgroundUrl: String? = null
     var mediaQualities = LinkedHashMap<String, Uri>()
     var subtitles: ArrayList<MediaItem.Subtitle>? = null
+    var seek: Long = 0
+
     var currentSubtitle: Int? = null
         set(value) {
             if (value == null) {
@@ -105,7 +107,7 @@ class MediaInfo {
     }
 
     fun addSubtitle(subtitleUrl: String, language: String): MediaInfo {
-        val sub = MediaItem.Subtitle(Uri.parse(subtitleUrl), MimeTypes.APPLICATION_SUBRIP, language, Format.NO_VALUE)
+        val sub = MediaItem.Subtitle(Uri.parse(subtitleUrl), MimeTypes.TEXT_VTT, language, Format.NO_VALUE)
         if (subtitles == null)
             subtitles = ArrayList()
         subtitles!!.add(sub)
@@ -139,8 +141,13 @@ class MediaInfo {
     }
 
     fun isMediaLocal(quality: String?): Boolean {
-        if (Uri.parse(mediaQualities.get(quality)?.toString()).scheme == "file")
-            return true
+        if (mediaQualities.containsKey(quality)) {
+            if (Uri.parse(mediaQualities.get(quality)?.toString()).scheme == "file")
+                return true
+        } else {
+            if (Uri.parse(mediaQualities.get(currentQuality)?.toString()).scheme == "file")
+                return true
+        }
         return false
     }
 

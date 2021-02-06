@@ -99,8 +99,8 @@ public class MyExoPlayerManager : FrameLayout {
             if (value != null && player != null)
                 player.addListener(value!!)
         }
-    lateinit var dataSourceFactoryHttp : DataSource.Factory
-    lateinit var dataSourceFactoryFile : DataSource.Factory
+    lateinit var dataSourceFactoryHttp: DataSource.Factory
+    lateinit var dataSourceFactoryFile: DataSource.Factory
     var currentIndex = 0
     var mediaInfoes = ArrayList<MediaInfo>()
         private set
@@ -141,8 +141,8 @@ public class MyExoPlayerManager : FrameLayout {
         field.set(visualizer, middlePaint)
         subtitleView = playerView.subtitleView
 
-       dataSourceFactoryHttp = DefaultHttpDataSourceFactory(Util.getUserAgent(context, ""))
-       dataSourceFactoryFile = DefaultDataSourceFactory(context)
+        dataSourceFactoryHttp = DefaultHttpDataSourceFactory(Util.getUserAgent(context, ""))
+        dataSourceFactoryFile = DefaultDataSourceFactory(context)
 
         player.addListener(object : Player.EventListener {
             override fun onPlaybackStateChanged(state: Int) {
@@ -208,7 +208,7 @@ public class MyExoPlayerManager : FrameLayout {
 //                if (!hasVideo) {
                 try {
                     visualizer.setPlayer(audioSessionId);
-                }catch (e : Exception){
+                } catch (e: Exception) {
 
                 }
 //                    descriptionTextView.visibility = View.GONE
@@ -298,15 +298,19 @@ public class MyExoPlayerManager : FrameLayout {
         qualityChanging = true
         player.stop()
         player.clearMediaItems()
-        mediaInfoes.get(player.currentWindowIndex).getMediaItem(tempQuality!!)?.let {
+        val media = mediaInfoes.get(player.currentWindowIndex)
+        media.getMediaItem(tempQuality!!)?.let {
             for (item in mediaInfoes) {
                 buildMediaSource(item)?.let { player.addMediaSource(it) }
             }
             player.seekToDefaultPosition(current)
+            player.prepare()
+            player.play()
+            if (pos > media.seek)
+                player.seekTo(pos)
+            else
+                player.seekTo(media?.seek)
         }
-        player.prepare()
-        player.play()
-        player.seekTo(pos)
     }
 
 
@@ -337,18 +341,12 @@ public class MyExoPlayerManager : FrameLayout {
     private fun buildMediaSource(mediaInfo: MediaInfo): MediaSource? {
 
 
-        val dataSourceFactory = if(!mediaInfo.isMediaLocal(tempQuality!!)) dataSourceFactoryHttp else dataSourceFactoryFile
+        val dataSourceFactory = if (!mediaInfo.isMediaLocal(tempQuality!!)) dataSourceFactoryHttp else dataSourceFactoryFile
         var mediaSource: MediaSource
-        if (!mediaInfo.isLive){
-            if(!mediaInfo.isMediaLocal(tempQuality!!)){
-                mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(mediaInfo.getMediaItem(tempQuality!!)!!)
-            }  else {
-                mediaSource = DashMediaSource.Factory(dataSourceFactory).createMediaSource(mediaInfo.getMediaItem(tempQuality!!)!!)
-            }
-        }
-        else
+        if (!mediaInfo.isLive) {
+            mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(mediaInfo.getMediaItem(tempQuality!!)!!)
+        } else
             mediaSource = HlsMediaSource.Factory(dataSourceFactory).createMediaSource(mediaInfo.getMediaItem(tempQuality!!)!!)
-
         if (mediaInfo.getCurrentSubtitle() == null) {
             return mediaSource
         }
@@ -421,11 +419,11 @@ public class MyExoPlayerManager : FrameLayout {
         player.stop()
     }
 
-    fun showController(){
+    fun showController() {
         playerView?.showController()
     }
 
-    fun hideController(){
+    fun hideController() {
         playerView?.hideController()
     }
 
