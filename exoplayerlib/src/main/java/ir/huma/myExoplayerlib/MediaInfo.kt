@@ -59,6 +59,11 @@ class MediaInfo {
         return this
     }
 
+    fun setSeek(seek : Long): MediaInfo {
+        this.seek = seek
+        return this
+    }
+
     fun setLogoUrl(logoUrl: String?): MediaInfo {
         this.logoUrl = logoUrl
         return this

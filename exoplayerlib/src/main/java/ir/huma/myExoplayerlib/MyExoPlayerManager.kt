@@ -174,8 +174,11 @@ public class MyExoPlayerManager : FrameLayout {
                     visualizer.visibility = View.GONE
                     playerView.controllerShowTimeoutMs = 0
                     val item = mediaInfoes.get(player.currentWindowIndex)
-                    Log.d("exo_player", "setData" + " : onTrackChangeed " + item.title + " " + item.currentQuality)
 
+                    Log.d("exo_player", "setData" + " : onTrackChangeed " + item.title + " " + item.currentQuality)
+                    if(item.seek > player.currentPosition){
+                        player.seekTo(item.seek)
+                    }
                     setData()
                 }
             }
@@ -401,6 +404,9 @@ public class MyExoPlayerManager : FrameLayout {
 
     fun start() {
         player.seekToDefaultPosition(currentIndex)
+        if(mediaInfoes.get(currentIndex).seek > player.currentPosition){
+            player.seekTo(mediaInfoes.get(currentIndex).seek)
+        }
         subtitleView!!.setStyle(CaptionStyleCompat(Color.WHITE, Color.TRANSPARENT, Color.TRANSPARENT, CaptionStyleCompat.EDGE_TYPE_OUTLINE, Color.BLACK, typeface))
         player.prepare()
         player.play()
