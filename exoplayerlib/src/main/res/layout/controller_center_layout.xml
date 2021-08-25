@@ -42,7 +42,7 @@
                 android:textColor="@color/exo_white"
                 android:textSize="26sp" />
 
-            <ir.huma.myExoplayerlib.util.TextViewJustify
+            <TextView
                 android:id="@+id/descriptionTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
