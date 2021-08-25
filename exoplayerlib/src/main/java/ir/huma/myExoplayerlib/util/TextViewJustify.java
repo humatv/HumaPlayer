@@ -159,6 +159,9 @@ public class TextViewJustify extends TextView
             {
                 continue;
             }
+            if(!block.contains(" ") && block.length() > 99){
+                block = block.substring(0,99)+ " " + block.substring(99);
+            }
             wrappedObj = TextJustifyUtils.createWrappedLine(block, paint, spaceOffset, dirtyRegionWidth);
 
             wrappedLine = ((String) wrappedObj[0]);
