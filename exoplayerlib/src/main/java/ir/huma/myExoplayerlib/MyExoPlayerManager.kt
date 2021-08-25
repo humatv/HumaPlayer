@@ -80,11 +80,15 @@ public class MyExoPlayerManager : FrameLayout {
     lateinit var player: SimpleExoPlayer
     lateinit var playerView: MyPlayerView
     var hasVideo = false
-        get() {
-            if (player != null)
-                return player.videoFormat != null || (player.videoFormat == null && player.audioFormat == null)
-            return field
-        }
+//        get() {
+////            if(field){
+////                return field
+////            }
+////            if (player != null)
+////                return player.videoFormat != null || (player.videoFormat == null && player.audioFormat == null)
+//            return field
+//        }
+
     private lateinit var view: View
     private lateinit var visualizer: LineBarVisualizer
     private lateinit var titleTextView: TextView
@@ -147,15 +151,18 @@ public class MyExoPlayerManager : FrameLayout {
         player.addListener(object : Player.EventListener {
             override fun onPlaybackStateChanged(state: Int) {
                 if (state == PlaybackState.STATE_PLAYING) {
-                    if (!hasVideo) {
-                        descriptionTextView.visibility = View.GONE
-                        visualizer.visibility = View.VISIBLE
-                        playerView.controllerShowTimeoutMs = 0
-                    } else {
-                        descriptionTextView.visibility = View.VISIBLE
-                        visualizer.visibility = View.GONE
-                        playerView.controllerShowTimeoutMs = showControllerTimeout
-                    }
+//                    Handler().postDelayed(Runnable {
+                        if (!hasVideo) {
+                            descriptionTextView.visibility = View.GONE
+                            visualizer.visibility = View.VISIBLE
+                            playerView.controllerShowTimeoutMs = 0
+                        } else {
+                            descriptionTextView.visibility = View.VISIBLE
+                            visualizer.visibility = View.GONE
+                            playerView.controllerShowTimeoutMs = showControllerTimeout
+                        }
+//                    },5000)
+
                     val item = mediaInfoes.get(player.currentWindowIndex)
                     tempQuality = item.currentQuality
                     Log.d("exo_player", "setData" + " : statePlaying " + item.title + " " + item.currentQuality)
@@ -167,6 +174,12 @@ public class MyExoPlayerManager : FrameLayout {
 
             override fun onTracksChanged(trackGroups: TrackGroupArray, trackSelections: TrackSelectionArray) {
                 currentIndex = player.currentWindowIndex
+
+                if(trackGroups != null && trackGroups.length == 1 && trackGroups[0].getFormat(0).sampleMimeType?.indexOf("audio") != -1){
+                    hasVideo = false
+                } else if(trackGroups != null && trackGroups.length >1 ) {
+                    hasVideo = true
+                }
 //                super.onTracksChanged(trackGroups, trackSelections)
                 if (!qualityChanging) {
 
@@ -186,6 +199,7 @@ public class MyExoPlayerManager : FrameLayout {
         })
         player.addVideoListener(object : VideoListener {
             override fun onRenderedFirstFrame() {
+//                hasVideo = true
                 Log.d("exo_player", "addVideoListener " + player.audioFormat + player.videoFormat)
             }
         })
@@ -212,7 +226,7 @@ public class MyExoPlayerManager : FrameLayout {
                 try {
                     visualizer.setPlayer(audioSessionId);
                 } catch (e: Exception) {
-
+                    e.printStackTrace()
                 }
 //                    descriptionTextView.visibility = View.GONE
 //                }
