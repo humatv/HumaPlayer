@@ -40,10 +40,12 @@ class MediaInfo {
     var currentQuality: String? = null
         private set
         get() {
-            if (field == null)
+            if (field == null) if (mediaQualities != null && mediaQualities.size > 0) {
                 return mediaQualities.keys.toList().get(0)
-            else
-                return field
+            } else {
+                return ""
+            }
+            else return field
         }
     var mediaItemBuilder: MediaItem.Builder = MediaItem.Builder()
         private set
@@ -59,7 +61,7 @@ class MediaInfo {
         return this
     }
 
-    fun setSeek(seek : Long): MediaInfo {
+    fun setSeek(seek: Long): MediaInfo {
         this.seek = seek
         return this
     }
@@ -113,8 +115,7 @@ class MediaInfo {
 
     fun addSubtitle(subtitleUrl: String, language: String): MediaInfo {
         val sub = MediaItem.Subtitle(Uri.parse(subtitleUrl), MimeTypes.TEXT_VTT, language, Format.NO_VALUE)
-        if (subtitles == null)
-            subtitles = ArrayList()
+        if (subtitles == null) subtitles = ArrayList()
         subtitles!!.add(sub)
         if (currentSubtitle == null) {
             currentSubtitle = 0
@@ -135,10 +136,14 @@ class MediaInfo {
         }
         if (mediaItem == null || currentQuality != quality) {
             if (mediaQualities.containsKey(quality)) {
-                mediaItem = mediaItemBuilder.setUri(mediaQualities.get(quality)).build()
+                mediaItem = mediaItemBuilder.setUri(
+                    if(mediaQualities.get(quality) == null) Uri.EMPTY else mediaQualities.get(quality))
+                    .build()
                 currentQuality = quality;
             } else if (mediaItem == null) {
-                mediaItem = mediaItemBuilder.setUri(mediaQualities.get(currentQuality)).build()
+                mediaItem = mediaItemBuilder.setUri(
+                    if(mediaQualities.get(currentQuality) == null) Uri.EMPTY else mediaQualities.get(currentQuality))
+                    .build()
             }
         }
 
@@ -146,12 +151,14 @@ class MediaInfo {
     }
 
     fun isMediaLocal(quality: String?): Boolean {
-        if (mediaQualities.containsKey(quality)) {
-            if (Uri.parse(mediaQualities.get(quality)?.toString()).scheme == "file")
-                return true
-        } else {
-            if (Uri.parse(mediaQualities.get(currentQuality)?.toString()).scheme == "file")
-                return true
+        try {
+            if (mediaQualities.containsKey(quality)) {
+                if (Uri.parse(mediaQualities.get(quality)?.toString()).scheme == "file") return true
+            } else {
+                if (Uri.parse(mediaQualities.get(currentQuality)?.toString()).scheme == "file") return true
+            }
+        } catch (e: Exception) {
+
         }
         return false
     }
@@ -201,8 +208,7 @@ class MediaInfo {
                 if (pos == objects[0]) {
                     view.findViewById<ImageView>(R.id.imageView).visibility = View.VISIBLE
                 }
-                if (objects.size > 1)
-                    textView.setTypeface(objects[1] as Typeface?)
+                if (objects.size > 1) textView.setTypeface(objects[1] as Typeface?)
             }
         }
     }

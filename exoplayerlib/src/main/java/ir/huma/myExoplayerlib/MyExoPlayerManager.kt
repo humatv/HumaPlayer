@@ -309,6 +309,7 @@ public class MyExoPlayerManager : FrameLayout {
 
 
     fun changeMediaSource() {
+        Log.d("MyExoPlayer","changeMediaSource")
         player.pause()
         val pos = player.currentPosition
         val current = player.currentWindowIndex
@@ -341,6 +342,17 @@ public class MyExoPlayerManager : FrameLayout {
         buildMediaSource(mediaInfo)?.let { player.addMediaSource(it) }
     }
 
+    fun updateMediaItem(index : Int,media : MediaInfo){
+        Log.d("MyExoPlayer","updateMediaSource")
+
+        mediaInfoes.set(index,media)
+        buildMediaSource(media)?.let {
+            player.removeMediaItem(index)
+            player.addMediaSource(index,it)
+        }
+    }
+
+
     fun addMediaItems(index: Int, mediaInfoes: List<MediaInfo>) {
         this.mediaInfoes.addAll(index, mediaInfoes)
         for (item in mediaInfoes) {
@@ -356,6 +368,7 @@ public class MyExoPlayerManager : FrameLayout {
     }
 
     private fun buildMediaSource(mediaInfo: MediaInfo): MediaSource? {
+        Log.d("MyExoPlayer","buildMediaSource")
 
 
         val dataSourceFactory = if (!mediaInfo.isMediaLocal(tempQuality!!)) dataSourceFactoryHttp else dataSourceFactoryFile
@@ -376,6 +389,7 @@ public class MyExoPlayerManager : FrameLayout {
 
 
     private fun setData() {
+
         val item = mediaInfoes.get(player.currentWindowIndex)
         titleTextView.setText(item.title)
         if (item.description != null && hasVideo) {
@@ -417,6 +431,8 @@ public class MyExoPlayerManager : FrameLayout {
     }
 
     fun start() {
+        Log.d("MyExoPlayer","start")
+
         player.seekToDefaultPosition(currentIndex)
         if(mediaInfoes.get(currentIndex).seek > player.currentPosition){
             player.seekTo(mediaInfoes.get(currentIndex).seek)

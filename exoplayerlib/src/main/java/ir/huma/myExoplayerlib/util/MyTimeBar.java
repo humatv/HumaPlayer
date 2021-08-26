@@ -928,7 +928,7 @@ public class MyTimeBar extends View implements TimeBar {
             return;
         }
         lastExclusionRectangle = new Rect(/* left= */ 0, /* top= */ 0, width, height);
-        setSystemGestureExclusionRects(Collections.singletonList(lastExclusionRectangle));
+//        setSystemGestureExclusionRects(Collections.singletonList(lastExclusionRectangle));
     }
 
     private String getProgressText() {
