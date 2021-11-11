@@ -156,6 +156,7 @@ public class MyExoPlayerManager : FrameLayout {
                             descriptionTextView.visibility = View.GONE
                             visualizer.visibility = View.VISIBLE
                             playerView.controllerShowTimeoutMs = 0
+                            playerView.controllerHideOnTouch = false
                         } else {
                             descriptionTextView.visibility = View.VISIBLE
                             visualizer.visibility = View.GONE
