@@ -13,7 +13,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ir.huma.myExoplayerlib.MyExoPlayerManager
+    <ir.huma.myExoplayerlib.HumaExoPlayerView
         android:id="@+id/myExoPlayer"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
