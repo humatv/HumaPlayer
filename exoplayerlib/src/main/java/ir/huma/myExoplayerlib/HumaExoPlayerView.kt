@@ -17,7 +17,9 @@ import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.DrawableImageViewTarget
 import com.bumptech.glide.request.target.Target
+import com.bumptech.glide.request.transition.Transition
 import com.chibde.visualizer.LineBarVisualizer
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.audio.AudioListener
@@ -310,30 +312,25 @@ class HumaExoPlayerView : FrameLayout {
             descriptionTextView.visibility = View.GONE
         }
         handleVideoUI(item.hasVideo)
-        avatarImageView.visibility = View.GONE
         if (item.logoUrl != null) {
-            Glide.with(context).load(item.logoUrl).listener(object : RequestListener<Drawable> {
-                override fun onLoadFailed(
-                    e: GlideException?,
-                    model: Any?,
-                    target: Target<Drawable>?,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    return false
-                }
+            Glide.with(context).load(item.logoUrl)
+                .into(object : DrawableImageViewTarget(avatarImageView){
+                    override fun onResourceReady(
+                        resource: Drawable,
+                        transition: Transition<in Drawable>?
+                    ) {
+                        Log.d(TAG, "onResourceReady: ready!")
+                        super.onResourceReady(resource, transition)
+                        avatarImageView.visibility = View.VISIBLE
+                    }
 
-                override fun onResourceReady(
-                    resource: Drawable?,
-                    model: Any?,
-                    target: Target<Drawable>?,
-                    dataSource: com.bumptech.glide.load.DataSource?,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    avatarImageView.visibility = View.VISIBLE
-                    return false
-                }
-
-            }).into(avatarImageView)
+                    override fun onLoadFailed(errorDrawable: Drawable?) {
+                        super.onLoadFailed(errorDrawable)
+                        avatarImageView.visibility = View.GONE
+                    }
+                })
+        } else {
+            avatarImageView.visibility = View.GONE
         }
         if (item.backgroundUrl != null && item.hasVideo == false) {
             Glide.with(context).load(item.backgroundUrl).into(backImageView)

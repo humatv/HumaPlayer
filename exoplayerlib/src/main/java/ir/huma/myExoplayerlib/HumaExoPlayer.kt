@@ -20,7 +20,7 @@ class HumaExoPlayer(context: Context) : SimpleExoPlayer(SimpleExoPlayer.Builder(
         DefaultHttpDataSourceFactory(Util.getUserAgent(context, context.packageName))
     private var dataSourceFactoryFile: DataSource.Factory = DefaultDataSourceFactory(context)
     private var qualityChanging = false
-
+    var tag: Any? = null;
     var updateViewListener: UpdateViewListener? = null
     var mediaInfoes = ArrayList<MediaInfo>()
         private set
@@ -78,23 +78,24 @@ class HumaExoPlayer(context: Context) : SimpleExoPlayer(SimpleExoPlayer.Builder(
     }
 
 
-    fun notifyMediaChange() {
+    fun notifyMediaChange(currentIndex: Int = currentWindowIndex) {
         qualityChanging = true
         pause()
         stop()
         clearMediaItems()
-        val media = getCurrentMedia()
-        media!!.getMediaItem(defaultQuality!!)?.let {
+        val media = mediaInfoes[currentIndex]
+        media.getMediaItem(defaultQuality!!)?.let {
             for (item in mediaInfoes) {
                 addMediaSource(buildMediaSource(item))
             }
-            seekToDefaultPosition(currentWindowIndex)
+            val isResumePlaying = currentIndex == currentWindowIndex
+            seekToDefaultPosition(currentIndex)
             prepare()
             play()
-            if (currentPosition > media!!.seek)
+            if (isResumePlaying && currentPosition > media.seek)
                 seekTo(currentPosition)
             else
-                seekTo(media!!.seek)
+                seekTo(media.seek)
         }
     }
 
@@ -156,7 +157,7 @@ class HumaExoPlayer(context: Context) : SimpleExoPlayer(SimpleExoPlayer.Builder(
         return MergingMediaSource(mediaSource, subtitleSource, subtitleSource2)
     }
 
-    fun start(currentIndex: Int =0 ) {
+    fun start(currentIndex: Int = 0) {
         Log.d("MyExoPlayer", "start")
 
         seekToDefaultPosition(currentIndex)
@@ -167,7 +168,6 @@ class HumaExoPlayer(context: Context) : SimpleExoPlayer(SimpleExoPlayer.Builder(
         prepare()
         play()
     }
-
 
     interface UpdateViewListener {
         fun update(player: SimpleExoPlayer, mediaInfo: MediaInfo)
