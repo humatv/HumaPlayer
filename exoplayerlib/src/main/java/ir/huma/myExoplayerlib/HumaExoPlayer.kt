@@ -103,10 +103,24 @@ class HumaExoPlayer(context: Context) : SimpleExoPlayer(SimpleExoPlayer.Builder(
         return currentWindowIndex.let { mediaInfoes.getOrNull(it) }
     }
 
-
     fun addMedia(index: Int, mediaInfo: MediaInfo) {
-        mediaInfoes.add(index, mediaInfo)
-        addMediaSource(index, buildMediaSource(mediaInfo))
+        var newIndex = 0
+        if (mediaInfoes.size == 0) {
+            newIndex = 0
+        } else {
+            if (mediaInfoes.get(0).index > index) {
+                newIndex = 0
+            }
+            else if (mediaInfoes.size > index) {
+                newIndex = index
+            }
+            else {
+                newIndex = mediaInfoes.size
+            }
+        }
+        mediaInfo.index = index
+        mediaInfoes.add(newIndex, mediaInfo)
+        addMediaSource(newIndex, buildMediaSource(mediaInfo))
     }
 
     fun addMedia(mediaInfo: MediaInfo) {

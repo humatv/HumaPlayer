@@ -17,6 +17,7 @@ class MediaInfo {
     var title: String? = null
     var description: String? = null
     var logoUrl: String? = null
+    var index: Int = 0
     var backgroundUrl: String? = null
     var mediaQualities = LinkedHashMap<String, Uri>()
     var subtitles: ArrayList<MediaItem.Subtitle>? = null
