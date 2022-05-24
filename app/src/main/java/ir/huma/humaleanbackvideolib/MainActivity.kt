@@ -5,12 +5,14 @@ import android.content.pm.PackageManager
 import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Environment
+import android.view.View.VISIBLE
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
+import com.bumptech.glide.Glide
 import ir.huma.myExoplayerlib.HumaExoPlayer
-import ir.huma.myExoplayerlib.MediaInfo
 import ir.huma.myExoplayerlib.HumaExoPlayerView
+import ir.huma.myExoplayerlib.MediaInfo
 import java.io.File
 
 
@@ -24,7 +26,7 @@ class MainActivity : FragmentActivity() {
         if (ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.RECORD_AUDIO
-            ) !== PackageManager.PERMISSION_GRANTED
+            ) != PackageManager.PERMISSION_GRANTED
         ) {
             ActivityCompat.requestPermissions(
                 this,
@@ -35,16 +37,22 @@ class MainActivity : FragmentActivity() {
 
         playerView = findViewById(R.id.myExoPlayer)
         player = HumaExoPlayer(this)
+        playerView.showVisualizerInsteadOfDescription = false
         playerView.player = player
         var rootFile = File(Environment.getExternalStorageDirectory(), "HumaFit");
 //        myExoPlayer.addMediaItem(MediaInfo().addMediaQuality("", "file://"+rootFile.absoluteFile+"/285ccb9c-e2be-4ee8-97fc-64cc5fc27f3a.mp4"))
 //
 
+        Glide.with(this)
+            .load("https://music-fa.com/wp-content/uploads/2020/12/Mohammad-Motamedi-Tehrane-Ashegh-Cover-Music-fa.com_-1.jpg")
+            .into(playerView.backImageView)
+        playerView.backImageView.visibility = VISIBLE
+
         player.addMedia(
             MediaInfo().setTitle("تهران عاشق")
                 .setLogoUrl("https://music-fa.com/wp-content/uploads/2020/12/Mohammad-Motamedi-Tehrane-Ashegh-Cover-Music-fa.com_-1.jpg")
-                .setBackgroundUrl("https://music-fa.com/wp-content/uploads/2020/12/Mohammad-Motamedi-Tehrane-Ashegh-Cover-Music-fa.com_-1.jpg")
-                .setDescription("آلبوم تهران عاشق محمد معتمدی به صورت تکی و یکجا")
+//                .setBackgroundUrl("https://music-fa.com/wp-content/uploads/2020/12/Mohammad-Motamedi-Tehrane-Ashegh-Cover-Music-fa.com_-1.jpg")
+                .setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.")
                 .addMediaQuality(
                     "128",
                     "https://dls.music-fa.com/tagdl/99/Mohammad%20Motamedi%20-%20Gole%20Sang%20(320).mp3"

@@ -42,7 +42,7 @@ class HumaExoPlayerView : FrameLayout {
         defStyleAttr
     )
 
-    var showVisualizer = true
+    var showVisualizerInsteadOfDescription = true
     var showControllerTimeout = 4000
 
     var typeface: Typeface? = null
@@ -69,7 +69,7 @@ class HumaExoPlayerView : FrameLayout {
     private lateinit var view: View
     private lateinit var visualizer: MyLineBarVisualizer
     private lateinit var titleTextView: TextView
-    private lateinit var descriptionTextView: TextView
+    lateinit var descriptionTextView: TextView
     private lateinit var avatarImageView: ImageView
     private lateinit var qualityButton: ImageView
     private lateinit var subtitleButton: ImageView
@@ -284,8 +284,9 @@ class HumaExoPlayerView : FrameLayout {
     private fun handleVideoUI(hasVideo: Boolean?) {
         Log.d(TAG, "handleVideoUI: ${hasVideo}")
         if (hasVideo == false) {
-            descriptionTextView.visibility = View.GONE
-            if (showVisualizer) visualizer.visibility = View.VISIBLE
+            descriptionTextView.visibility =
+                if (showVisualizerInsteadOfDescription) GONE else VISIBLE
+            visualizer.visibility = if (showVisualizerInsteadOfDescription) VISIBLE else GONE
             playerView.controllerShowTimeoutMs = 0
             playerView.controllerHideOnTouch = false
 
@@ -307,16 +308,17 @@ class HumaExoPlayerView : FrameLayout {
         val item = player?.getCurrentMedia() ?: return
         Log.d(TAG, "setData: ${item}")
         titleTextView.text = item.title
+        descriptionTextView.text = item.description
         if (item.description != null && item.hasVideo == true) {
-            descriptionTextView.text = item.description
             descriptionTextView.visibility = View.VISIBLE
         } else {
-            descriptionTextView.visibility = View.GONE
+            descriptionTextView.visibility =
+                if (showVisualizerInsteadOfDescription) GONE else VISIBLE
         }
         handleVideoUI(item.hasVideo)
         if (item.logoUrl != null) {
             Glide.with(context).load(item.logoUrl)
-                .into(object : DrawableImageViewTarget(avatarImageView){
+                .into(object : DrawableImageViewTarget(avatarImageView) {
                     override fun onResourceReady(
                         resource: Drawable,
                         transition: Transition<in Drawable>?
@@ -338,7 +340,7 @@ class HumaExoPlayerView : FrameLayout {
             Glide.with(context).load(item.backgroundUrl).into(backImageView)
             backImageView.visibility = View.VISIBLE
         } else {
-            backImageView.visibility = View.GONE
+
         }
         if (item.getQualityList().size > 1) {
             qualityButton.visibility = View.VISIBLE
