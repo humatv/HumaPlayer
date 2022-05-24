@@ -42,6 +42,7 @@ class HumaExoPlayerView : FrameLayout {
         defStyleAttr
     )
 
+    var showVisualizer = true
     var showControllerTimeout = 4000
 
     var typeface: Typeface? = null
@@ -71,8 +72,9 @@ class HumaExoPlayerView : FrameLayout {
     private lateinit var descriptionTextView: TextView
     private lateinit var avatarImageView: ImageView
     private lateinit var qualityButton: ImageView
-    private lateinit var backImageView: ImageView
     private lateinit var subtitleButton: ImageView
+    lateinit var backImageView: ImageView
+        private set
 
 
     private var subtitleView: SubtitleView? = null
@@ -283,7 +285,7 @@ class HumaExoPlayerView : FrameLayout {
         Log.d(TAG, "handleVideoUI: ${hasVideo}")
         if (hasVideo == false) {
             descriptionTextView.visibility = View.GONE
-            visualizer.visibility = View.VISIBLE
+            if (showVisualizer) visualizer.visibility = View.VISIBLE
             playerView.controllerShowTimeoutMs = 0
             playerView.controllerHideOnTouch = false
 
