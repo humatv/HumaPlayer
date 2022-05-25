@@ -42,14 +42,16 @@ class HumaExoPlayerView : FrameLayout {
         defStyleAttr
     )
 
-    var showVisualizerInsteadOfDescription = true
+    var showDescriptionOnAudio = true
+    var showVisualizer = true
+
     var showControllerTimeout = 4000
 
     var typeface: Typeface? = null
         set(value) {
             field = value
-            titleTextView.typeface = value
-            descriptionTextView.typeface = value
+            titleTextView?.typeface = value
+            descriptionTextView?.typeface = value
             view.findViewById<TextView>(R.id.exo_duration).typeface = value
             view.findViewById<TextView>(R.id.exo_position).typeface = value
         }
@@ -70,13 +72,13 @@ class HumaExoPlayerView : FrameLayout {
     private lateinit var visualizer: MyLineBarVisualizer
     private lateinit var avatarImageView: ImageView
     private lateinit var qualityButton: ImageView
-    private lateinit var subtitleButton: ImageView
+    var subtitleButton: ImageView? = null
         private set
-    lateinit var descriptionTextView: TextView
+    var descriptionTextView: TextView? = null
         private set
-    lateinit var backImageView: ImageView
+    var backImageView: ImageView? = null
         private set
-    private lateinit var titleTextView: TextView
+    var titleTextView: TextView? = null
         private set
 
 
@@ -212,7 +214,7 @@ class HumaExoPlayerView : FrameLayout {
             }
         }
 
-        subtitleButton.setOnClickListener {
+        subtitleButton?.setOnClickListener {
             val contentView = LinearLayout(context)
             contentView.orientation = LinearLayout.VERTICAL
             contentView.setBackgroundColor(Color.WHITE)
@@ -254,10 +256,10 @@ class HumaExoPlayerView : FrameLayout {
                     val x = contentView.indexOfChild(v)
                     if (x == adapter.count - 1) {
                         subtitleView!!.visibility = View.GONE
-                        subtitleButton.isSelected = true
+                        subtitleButton?.isSelected = true
                     } else {
                         subtitleView!!.visibility = View.VISIBLE
-                        subtitleButton.isSelected = false
+                        subtitleButton?.isSelected = false
                         if (player?.getCurrentMedia()?.currentSubtitle != x) {
                             player?.getCurrentMedia()?.currentSubtitle = x
                             player?.notifyMediaChange()
@@ -287,14 +289,14 @@ class HumaExoPlayerView : FrameLayout {
     private fun handleVideoUI(hasVideo: Boolean?) {
         Log.d(TAG, "handleVideoUI: ${hasVideo}")
         if (hasVideo == false) {
-            descriptionTextView.visibility =
-                if (showVisualizerInsteadOfDescription) GONE else VISIBLE
-            visualizer.visibility = if (showVisualizerInsteadOfDescription) VISIBLE else GONE
+            descriptionTextView?.visibility =
+                if (showDescriptionOnAudio) GONE else VISIBLE
+            visualizer.visibility = if (showVisualizer) VISIBLE else GONE
             playerView.controllerShowTimeoutMs = 0
             playerView.controllerHideOnTouch = false
 
         } else {
-            descriptionTextView.visibility = View.VISIBLE
+            descriptionTextView?.visibility = View.VISIBLE
             visualizer.visibility = View.GONE
             playerView.controllerShowTimeoutMs = showControllerTimeout
         }
@@ -310,13 +312,13 @@ class HumaExoPlayerView : FrameLayout {
     private fun setData() {
         val item = player?.getCurrentMedia() ?: return
         Log.d(TAG, "setData: ${item}")
-        titleTextView.text = item.title
-        descriptionTextView.text = item.description
+        titleTextView?.text = item.title
+        descriptionTextView?.text = item.description
         if (item.description != null && item.hasVideo == true) {
-            descriptionTextView.visibility = View.VISIBLE
+            descriptionTextView?.visibility = View.VISIBLE
         } else {
-            descriptionTextView.visibility =
-                if (showVisualizerInsteadOfDescription) GONE else VISIBLE
+            descriptionTextView?.visibility =
+                if (showDescriptionOnAudio) GONE else VISIBLE
         }
         handleVideoUI(item.hasVideo)
         if (item.logoUrl != null) {
@@ -340,10 +342,8 @@ class HumaExoPlayerView : FrameLayout {
             avatarImageView.visibility = View.GONE
         }
         if (item.backgroundUrl != null && item.hasVideo == false) {
-            Glide.with(context).load(item.backgroundUrl).into(backImageView)
-            backImageView.visibility = View.VISIBLE
-        } else {
-
+            Glide.with(context).load(item.backgroundUrl).into(backImageView!!)
+            backImageView?.visibility = View.VISIBLE
         }
         if (item.getQualityList().size > 1) {
             qualityButton.visibility = View.VISIBLE
@@ -353,9 +353,9 @@ class HumaExoPlayerView : FrameLayout {
         }
 
         if (item.subtitles == null || item.subtitles!!.size == 0) {
-            subtitleButton.visibility = View.GONE
+            subtitleButton?.visibility = View.GONE
         } else {
-            subtitleButton.visibility = View.VISIBLE
+            subtitleButton?.visibility = View.VISIBLE
         }
     }
 

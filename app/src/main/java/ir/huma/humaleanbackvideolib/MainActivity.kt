@@ -37,7 +37,8 @@ class MainActivity : FragmentActivity() {
 
         playerView = findViewById(R.id.myExoPlayer)
         player = HumaExoPlayer(this)
-        playerView.showVisualizerInsteadOfDescription = false
+        playerView.showDescriptionOnAudio = true
+        playerView.showVisualizer = false
         playerView.player = player
         var rootFile = File(Environment.getExternalStorageDirectory(), "HumaFit");
 //        myExoPlayer.addMediaItem(MediaInfo().addMediaQuality("", "file://"+rootFile.absoluteFile+"/285ccb9c-e2be-4ee8-97fc-64cc5fc27f3a.mp4"))
@@ -45,8 +46,8 @@ class MainActivity : FragmentActivity() {
 
         Glide.with(this)
             .load("https://music-fa.com/wp-content/uploads/2020/12/Mohammad-Motamedi-Tehrane-Ashegh-Cover-Music-fa.com_-1.jpg")
-            .into(playerView.backImageView)
-        playerView.backImageView.visibility = VISIBLE
+            .into(playerView.backImageView!!)
+        playerView.backImageView?.visibility = VISIBLE
 
         player.addMedia(
             MediaInfo().setTitle("تهران عاشق")
