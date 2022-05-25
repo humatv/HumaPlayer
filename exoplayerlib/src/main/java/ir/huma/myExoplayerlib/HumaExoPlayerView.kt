@@ -68,12 +68,15 @@ class HumaExoPlayerView : FrameLayout {
 
     private lateinit var view: View
     private lateinit var visualizer: MyLineBarVisualizer
-    private lateinit var titleTextView: TextView
-    lateinit var descriptionTextView: TextView
     private lateinit var avatarImageView: ImageView
     private lateinit var qualityButton: ImageView
     private lateinit var subtitleButton: ImageView
+        private set
+    lateinit var descriptionTextView: TextView
+        private set
     lateinit var backImageView: ImageView
+        private set
+    private lateinit var titleTextView: TextView
         private set
 
 
