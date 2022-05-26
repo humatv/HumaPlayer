@@ -17,10 +17,13 @@ class MediaInfo {
     var title: String? = null
     var description: String? = null
     var logoUrl: String? = null
+    var index: Int = 0
     var backgroundUrl: String? = null
     var mediaQualities = LinkedHashMap<String, Uri>()
     var subtitles: ArrayList<MediaItem.Subtitle>? = null
     var seek: Long = 0
+    var hasVideo: Boolean? = null
+    var tag : Any? = null
 
     var currentSubtitle: Int? = null
         set(value) {
@@ -97,6 +100,16 @@ class MediaInfo {
         return this
     }
 
+    fun setHasVideo(hasVideo: Boolean): MediaInfo {
+        this.hasVideo = hasVideo
+        return this
+    }
+
+    fun setTag(tag : Any): MediaInfo {
+        this.tag = tag
+        return this
+    }
+
 
     override fun equals(other: Any?): Boolean {
         if (!(other is MediaInfo)) {
@@ -106,7 +119,9 @@ class MediaInfo {
             return true
         }
         if (other.mediaQualities != null && mediaQualities != null && other.mediaQualities.size == mediaQualities.size) {
-            if (other.mediaQualities.values.toList().get(0) == mediaQualities.values.toList().get(0)) {
+            if (other.mediaQualities.values.toList().get(0) == mediaQualities.values.toList()
+                    .get(0)
+            ) {
                 return true
             }
         }
@@ -114,7 +129,12 @@ class MediaInfo {
     }
 
     fun addSubtitle(subtitleUrl: String, language: String): MediaInfo {
-        val sub = MediaItem.Subtitle(Uri.parse(subtitleUrl), MimeTypes.TEXT_VTT, language, Format.NO_VALUE)
+        val sub = MediaItem.Subtitle(
+            Uri.parse(subtitleUrl),
+            MimeTypes.TEXT_VTT,
+            language,
+            Format.NO_VALUE
+        )
         if (subtitles == null) subtitles = ArrayList()
         subtitles!!.add(sub)
         if (currentSubtitle == null) {
@@ -137,12 +157,18 @@ class MediaInfo {
         if (mediaItem == null || currentQuality != quality) {
             if (mediaQualities.containsKey(quality)) {
                 mediaItem = mediaItemBuilder.setUri(
-                    if(mediaQualities.get(quality) == null) Uri.EMPTY else mediaQualities.get(quality))
+                    if (mediaQualities.get(quality) == null) Uri.EMPTY else mediaQualities.get(
+                        quality
+                    )
+                )
                     .build()
                 currentQuality = quality;
             } else if (mediaItem == null) {
                 mediaItem = mediaItemBuilder.setUri(
-                    if(mediaQualities.get(currentQuality) == null) Uri.EMPTY else mediaQualities.get(currentQuality))
+                    if (mediaQualities.get(currentQuality) == null) Uri.EMPTY else mediaQualities.get(
+                        currentQuality
+                    )
+                )
                     .build()
             }
         }
@@ -155,7 +181,10 @@ class MediaInfo {
             if (mediaQualities.containsKey(quality)) {
                 if (Uri.parse(mediaQualities.get(quality)?.toString()).scheme == "file") return true
             } else {
-                if (Uri.parse(mediaQualities.get(currentQuality)?.toString()).scheme == "file") return true
+                if (Uri.parse(
+                        mediaQualities.get(currentQuality)?.toString()
+                    ).scheme == "file"
+                ) return true
             }
         } catch (e: Exception) {
 
@@ -197,7 +226,8 @@ class MediaInfo {
         return null;
     }
 
-    class MyHolder(context: Context?, view: View?, arrayAdapter: ArrayAdapter<String>?) : MyViewHolder<String>(context, view, arrayAdapter) {
+    class MyHolder(context: Context?, view: View?, arrayAdapter: ArrayAdapter<String>?) :
+        MyViewHolder<String>(context, view, arrayAdapter) {
 
 
         override fun fill(t: String?, pos: Int) {
