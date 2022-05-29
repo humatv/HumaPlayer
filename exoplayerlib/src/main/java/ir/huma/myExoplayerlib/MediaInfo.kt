@@ -17,13 +17,15 @@ class MediaInfo {
     var title: String? = null
     var description: String? = null
     var logoUrl: String? = null
+    var logoHeight = 300 //px
+    var logoWidth = 300 //px
     var index: Int = 0
     var backgroundUrl: String? = null
     var mediaQualities = LinkedHashMap<String, Uri>()
     var subtitles: ArrayList<MediaItem.Subtitle>? = null
     var seek: Long = 0
     var hasVideo: Boolean? = null
-    var tag : Any? = null
+    var tag: Any? = null
 
     var currentSubtitle: Int? = null
         set(value) {
@@ -74,6 +76,12 @@ class MediaInfo {
         return this
     }
 
+    fun setLogoSize(width: Int, height: Int): MediaInfo {
+        this.logoWidth = width
+        this.logoHeight = height
+        return this
+    }
+
     fun setBackgroundUrl(backgroundUrl: String?): MediaInfo {
         this.backgroundUrl = backgroundUrl
         return this
@@ -105,7 +113,7 @@ class MediaInfo {
         return this
     }
 
-    fun setTag(tag : Any): MediaInfo {
+    fun setTag(tag: Any): MediaInfo {
         this.tag = tag
         return this
     }

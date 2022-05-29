@@ -1,6 +1,7 @@
 package ir.huma.myExoplayerlib
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
@@ -15,6 +16,8 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.Transformation
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.DrawableImageViewTarget
@@ -24,7 +27,6 @@ import com.chibde.visualizer.LineBarVisualizer
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.audio.AudioListener
 import com.google.android.exoplayer2.text.CaptionStyleCompat
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.ui.SubtitleView
 import ir.huma.myExoplayerlib.util.MyAdapter
 import ir.huma.myExoplayerlib.util.MyPlayerView
@@ -42,7 +44,10 @@ class HumaExoPlayerView : FrameLayout {
         defStyleAttr
     )
 
-    var showDescriptionOnAudio = true
+    var logoTransformations: Transformation<Bitmap>? = null
+    var backgroundTransformations: Transformation<Bitmap>? = null
+
+    var showDescriptionOnAudio = false
     var showVisualizer = true
 
     var showControllerTimeout = 4000
@@ -186,7 +191,8 @@ class HumaExoPlayerView : FrameLayout {
         Handler().postDelayed(object : Runnable {
             override fun run() {
                 try {
-                    visualizer.setPlayer(audioSessionId)
+                    if (showVisualizer)
+                        visualizer.setPlayer(audioSessionId)
                 } catch (e: Exception) {
 //                    setAudioSession(audioSessionId)
                 }
@@ -290,7 +296,7 @@ class HumaExoPlayerView : FrameLayout {
         Log.d(TAG, "handleVideoUI: ${hasVideo}")
         if (hasVideo == false) {
             descriptionTextView?.visibility =
-                if (showDescriptionOnAudio) GONE else VISIBLE
+                if (showDescriptionOnAudio) VISIBLE else GONE
             visualizer.visibility = if (showVisualizer) VISIBLE else GONE
             playerView.controllerShowTimeoutMs = 0
             playerView.controllerHideOnTouch = false
@@ -318,32 +324,26 @@ class HumaExoPlayerView : FrameLayout {
             descriptionTextView?.visibility = View.VISIBLE
         } else {
             descriptionTextView?.visibility =
-                if (showDescriptionOnAudio) GONE else VISIBLE
+                if (showDescriptionOnAudio) VISIBLE else GONE
         }
         handleVideoUI(item.hasVideo)
         if (item.logoUrl != null) {
-            Glide.with(context).load(item.logoUrl)
-                .into(object : DrawableImageViewTarget(avatarImageView) {
-                    override fun onResourceReady(
-                        resource: Drawable,
-                        transition: Transition<in Drawable>?
-                    ) {
-                        Log.d(TAG, "onResourceReady: ready!")
-                        super.onResourceReady(resource, transition)
-                        avatarImageView.visibility = View.VISIBLE
-                    }
-
-                    override fun onLoadFailed(errorDrawable: Drawable?) {
-                        super.onLoadFailed(errorDrawable)
-                        avatarImageView.visibility = View.GONE
-                    }
-                })
+            var glide =
+                Glide.with(context).load(item.logoUrl).override(item.logoWidth, item.logoHeight)
+            if (logoTransformations != null)
+                glide = glide.transform(logoTransformations)
+            glide.into(avatarImageView)
         } else {
             avatarImageView.visibility = View.GONE
         }
         if (item.backgroundUrl != null && item.hasVideo == false) {
-            Glide.with(context).load(item.backgroundUrl).into(backImageView!!)
+            var glide = Glide.with(context).load(item.backgroundUrl)
+            if (backgroundTransformations != null)
+                glide = glide.transform(backgroundTransformations)
+            glide.into(backImageView!!)
             backImageView?.visibility = View.VISIBLE
+        } else {
+            backImageView?.visibility = View.GONE
         }
         if (item.getQualityList().size > 1) {
             qualityButton.visibility = View.VISIBLE
