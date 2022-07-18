@@ -60,6 +60,8 @@ class HumaExoPlayerView : FrameLayout {
             view.findViewById<TextView>(R.id.exo_duration).typeface = value
             view.findViewById<TextView>(R.id.exo_position).typeface = value
         }
+    var customLayoutRes: Int? = null
+    var customLayoutIndex = 2
 
     var player: HumaExoPlayer? = null
         set(value) {
@@ -100,6 +102,14 @@ class HumaExoPlayerView : FrameLayout {
         qualityButton = view.findViewById(R.id.exo_quality)
         backImageView = view.findViewById(R.id.backImageView)
         subtitleButton = view.findViewById(R.id.exo_sub)
+
+        if (customLayoutRes != null)
+            view.findViewById<LinearLayout>(R.id.exo_center_layout).addView(
+                LayoutInflater.from(context).inflate(
+                    customLayoutRes!!, null, false
+                ), customLayoutIndex
+            )
+
 //        val trackSelector = DefaultTrackSelector(context!!)
 //        trackSelector.setParameters(trackSelector.buildUponParameters().setMaxVideoSizeSd())
 

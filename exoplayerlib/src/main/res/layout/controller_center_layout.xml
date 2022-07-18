@@ -18,11 +18,11 @@
 
 
         <LinearLayout
+            android:id="@+id/exo_center_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="16dp"
             android:layout_weight="1"
-
             android:gravity="bottom|right"
             android:orientation="vertical">
 
@@ -57,6 +57,7 @@
                 android:textSize="18sp" />
 
 
+
             <ir.huma.myExoplayerlib.MyLineBarVisualizer
                 android:id="@+id/visualizer"
                 android:layout_width="match_parent"
@@ -87,8 +88,8 @@
         android:id="@+id/exo_controller_bottom_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32px"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="32px">
 
 
         <TextView

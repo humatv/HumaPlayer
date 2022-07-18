@@ -92,10 +92,10 @@ class HumaExoPlayer(context: Context) : SimpleExoPlayer(SimpleExoPlayer.Builder(
             seekToDefaultPosition(currentIndex)
             prepare()
             play()
-            if (isResumePlaying && currentPosition > media.seek)
-                seekTo(currentPosition)
-            else
-                seekTo(media.seek)
+//            if (isResumePlaying && currentPosition > media.seek)
+//                seekTo(currentPosition)
+//            else
+//                seekTo(media.seek)
         }
     }
 
