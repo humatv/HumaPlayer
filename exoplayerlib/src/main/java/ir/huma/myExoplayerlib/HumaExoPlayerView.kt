@@ -432,7 +432,7 @@ class HumaExoPlayerView : FrameLayout {
         if (!player?.isPlaying!!) player?.start()
     }
 
-    fun playVideo() {
+    fun playVideo(currentIndex: Int = 0) {
         if (!player?.getCurrentMedia()?.mediaAd!!.isEmpty()) {
             adPlayerView.visibility = VISIBLE
             adPlayer?.addMedia(
@@ -445,7 +445,7 @@ class HumaExoPlayerView : FrameLayout {
             player?.prepare()
         } else {
             adPlayerView.visibility = GONE
-            player?.start()
+            player?.start(currentIndex)
         }
     }
 }
