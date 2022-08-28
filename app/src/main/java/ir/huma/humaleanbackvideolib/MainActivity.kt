@@ -58,8 +58,8 @@ class MainActivity : FragmentActivity() {
                     "128",
                     "https://dls.music-fa.com/tagdl/99/Mohammad%20Motamedi%20-%20Gole%20Sang%20(320).mp3"
                 )
-                .setMediaAdLink("https://dms.licdn.com/playlist/C4D05AQHcxSP518psyw/feedshare-ambry-analyzed_servable_progressive_video/0/1661530843805?e=2147483647&v=beta&t=6z_Mfhn_0PsqgKWd-70R8TUBEEymcbUcSY8RZD3wfuQ")
-//                .setAdTime(10)
+                .setMediaAdLink("https://hw6.asset.aparat.com/aparat-video/cda602eb67480ceb405429f9515987df24564321-480p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImIxNTIwY2NjZjE4ZDJjOGExOGVkYzBiY2IyYWI4ZDJlIiwiZXhwIjoxNjYxNzA5MjQ2LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.eWogn8uy1Ep8JGbKqthGWTBepzVj6gH2LR6o0a84kOI")
+//                .setMediaAdTime(10)
         )
 
         player.addMedia(
@@ -88,7 +88,7 @@ class MainActivity : FragmentActivity() {
                     "https://as9.cdn.asset.aparat.com/aparat-video/ab6d4bed0e8142d8a2648dc7cce4af6727728814-480p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6Ijg0NTU0ZjM3NWUwYTBkZjlhMDQ3MDg3NDRiNjcwY2Q3IiwiZXhwIjoxNjA3NTI3MjIxLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.VDqPiZI6DFwopLQFJ8sxJ9lD036YoqlBSKnx0Zv8yXU"
                 )
                 .setMediaAdLink("https://dms.licdn.com/playlist/C4D05AQHcxSP518psyw/feedshare-ambry-analyzed_servable_progressive_video/0/1661530843805?e=2147483647&v=beta&t=6z_Mfhn_0PsqgKWd-70R8TUBEEymcbUcSY8RZD3wfuQ")
-                .setMediaAdTime(10)
+//                .setMediaAdTime(10)
 
 //                .addSubtitle("https://cloudspace.huma.ir/s/mrziWnyAM4sEimw/download","en")
 //                .addSubtitle("https://cloudspace.huma.ir/s/68q8tKu1I9XTiXg/download", "fa")

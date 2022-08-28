@@ -85,7 +85,7 @@ class HumaExoPlayerView : FrameLayout {
     private var subtitleView: SubtitleView? = null
 
     var addTimeTextView: TextView? = null
-    private var timeToCloseAd: Int = 0
+    private var maxAdTime: Int = 0
 
     fun init() {
         view = LayoutInflater.from(context).inflate(R.layout.my_exo_player_mananger, this, true)
@@ -157,7 +157,9 @@ class HumaExoPlayerView : FrameLayout {
             }, 1000)
         }
 
-        adPlayer!!.addListener(adPlayerEventListener)
+        adPlayer?.let { safeAdPlayer ->
+            safeAdPlayer.addListener(adPlayerEventListener)
+        }
     }
 
     private fun initVisualizer() {
@@ -378,8 +380,8 @@ class HumaExoPlayerView : FrameLayout {
         override fun onIsPlayingChanged(isPlaying: Boolean) {
             super.onIsPlayingChanged(isPlaying)
             if (isPlaying) {
-                calculateTimeToCloseAd()
-                checkAdTime()
+                calculateMaxAdTime()
+                updateAdTime()
             }
         }
 
@@ -387,7 +389,7 @@ class HumaExoPlayerView : FrameLayout {
         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
             super.onPlayerStateChanged(playWhenReady, playbackState)
             if (playWhenReady && playbackState == Player.STATE_READY) {
-                calculateTimeToCloseAd()
+                calculateMaxAdTime()
             }
             if (playbackState == Player.STATE_ENDED || playbackState == Player.STATE_IDLE) {
                 closeAdAndPlayMainVideo()
@@ -402,52 +404,53 @@ class HumaExoPlayerView : FrameLayout {
         }
     }
 
-    private fun calculateTimeToCloseAd() {
-        if (player?.getCurrentMedia()?.adTime == 0) {
-            timeToCloseAd = adPlayer?.duration!!.toInt() / 1000
-        } else {
-            timeToCloseAd = Math.min(
-                adPlayer?.duration!!.toInt() / 1000,
-                player?.getCurrentMedia()?.adTime!!
-            )
+    private fun calculateMaxAdTime() {
+        adPlayer?.let { safeAdPlayer ->
+            maxAdTime = safeAdPlayer.duration.toInt() / 1000
         }
     }
 
-    private fun checkAdTime() {
-        addTimeTextView?.text = "آگهی (${timeToCloseAd})"
-        Handler(context.mainLooper).postDelayed(object : Runnable {
-            override fun run() {
-                if (timeToCloseAd > 0) {
-                    checkAdTime()
-                    timeToCloseAd--
-                } else {
-                    closeAdAndPlayMainVideo()
+    private fun updateAdTime() {
+        adPlayer?.let { safeAdPlayer ->
+            val timeToEndAd = (maxAdTime - safeAdPlayer.currentPosition / 1000).toInt()
+            addTimeTextView?.text =
+                "آگهی (${timeToEndAd})"
+            Handler(context.mainLooper).postDelayed(object : Runnable {
+                override fun run() {
+                    if (timeToEndAd > 1) {
+                        updateAdTime()
+                    }
                 }
-            }
-        }, 1000)
+            }, 1000)
+        }
     }
 
     private fun closeAdAndPlayMainVideo() {
         adPlayerView.visibility = GONE
+        adPlayerView.player = null
         adPlayer?.release()
-        if (!player?.isPlaying!!) player?.start(playerCurrentIndex)
+        player?.let { safePlayer ->
+            if (!safePlayer.isPlaying) safePlayer.start(playerCurrentIndex)
+        }
     }
 
     fun playVideo(currentIndex: Int = 0) {
         playerCurrentIndex = currentIndex
-        if (!player?.getCurrentMedia()?.mediaAd!!.isEmpty()) {
-            adPlayerView.visibility = VISIBLE
-            adPlayer?.addMedia(
-                0, MediaInfo().addMediaQuality(
-                    "",
-                    player?.getCurrentMedia()?.mediaAd!!
+        player?.let { safePlayer ->
+            if (!safePlayer.getCurrentMedia()?.mediaAd?.isEmpty()!!) {
+                adPlayerView.visibility = VISIBLE
+                adPlayer?.addMedia(
+                    0, MediaInfo().addMediaQuality(
+                        "",
+                        safePlayer.getCurrentMedia()?.mediaAd!!
+                    )
                 )
-            )
-            adPlayer?.start(0)
-            player?.prepare()
-        } else {
-            adPlayerView.visibility = GONE
-            player?.start(currentIndex)
+                adPlayer?.start(0)
+                safePlayer.prepare()
+            } else {
+                adPlayerView.visibility = GONE
+                safePlayer.start(currentIndex)
+            }
         }
     }
 }
