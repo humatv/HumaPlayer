@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:keepScreenOn="true"
-    android:orientation="vertical">
+    android:orientation="horizontal">
 
     <ir.huma.myExoplayerlib.util.MyPlayerView
         android:id="@+id/playerView"
@@ -13,10 +13,26 @@
         android:animateLayoutChanges="true"
         android:focusable="true"
         android:focusableInTouchMode="true"
+        android:visibility="visible"
         app:controller_layout_id="@layout/layout_controller_player"
         app:use_artwork="false">
 
         <requestFocus />
+    </ir.huma.myExoplayerlib.util.MyPlayerView>
+
+    <ir.huma.myExoplayerlib.util.MyPlayerView
+        android:id="@+id/adPlayerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:visibility="gone"
+        app:controller_layout_id="@layout/layout_controller_adplayer"
+        app:hide_on_touch="false"
+        app:use_artwork="false">
+
     </ir.huma.myExoplayerlib.util.MyPlayerView>
 
 </RelativeLayout>

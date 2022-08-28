@@ -58,6 +58,8 @@ class MainActivity : FragmentActivity() {
                     "128",
                     "https://dls.music-fa.com/tagdl/99/Mohammad%20Motamedi%20-%20Gole%20Sang%20(320).mp3"
                 )
+                .setMediaAdLink("https://dms.licdn.com/playlist/C4D05AQHcxSP518psyw/feedshare-ambry-analyzed_servable_progressive_video/0/1661530843805?e=2147483647&v=beta&t=6z_Mfhn_0PsqgKWd-70R8TUBEEymcbUcSY8RZD3wfuQ")
+//                .setAdTime(10)
         )
 
         player.addMedia(
@@ -70,8 +72,9 @@ class MainActivity : FragmentActivity() {
                 .setLogoUrl("https://cdn.isna.ir/d/2017/05/03/3/57478643.jpg?ts=1498045331768")
                 .addMediaQuality(
                     "144p",
-                    "https://as9.cdn.asset.aparat.com/aparat-video/ab6d4bed0e8142d8a2648dc7cce4af6727728814-144p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImM4N2JiY2JhYjgxNDk2YWFkNWJhYWM4OGRmZTU2N2M3IiwiZXhwIjoxNjA3NTE3NTM5LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.QpofxWAV4uwu0UC8liXbeVRNgv1cyTO9vwjojP9Vt64"
+                    "https://hajifirouz5.cdn.asset.aparat.com/aparat-video/f1b3edd1ce4b45fcc9f274afb35c673147236048-480p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6Ijg2YWIwY2Q4MWQ0NDQ1NmZmYTE4ZWM1MWVlOWY4YjIyIiwiZXhwIjoxNjYxNjI1Mjc0LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.zZIti5f6of3ejK7JHihwMnQIqx4vGm5QZ6Mnnhp42NU"
                 )
+
                 .addMediaQuality(
                     "240p",
                     "https://as4.cdn.asset.aparat.com/aparat-video/ab6d4bed0e8142d8a2648dc7cce4af6727728814-240p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImIwZDUyYjBjYzcxZGUwYTdjYTk4MzlkMmFjNTE0OTA5IiwiZXhwIjoxNjA3NTM3Mjk5LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.t8FENFALXpjBewE6UVuIWj_abEmsPAu9OlT0kmAUZ3o"
@@ -84,6 +87,9 @@ class MainActivity : FragmentActivity() {
                     "480p",
                     "https://as9.cdn.asset.aparat.com/aparat-video/ab6d4bed0e8142d8a2648dc7cce4af6727728814-480p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6Ijg0NTU0ZjM3NWUwYTBkZjlhMDQ3MDg3NDRiNjcwY2Q3IiwiZXhwIjoxNjA3NTI3MjIxLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.VDqPiZI6DFwopLQFJ8sxJ9lD036YoqlBSKnx0Zv8yXU"
                 )
+                .setMediaAdLink("https://dms.licdn.com/playlist/C4D05AQHcxSP518psyw/feedshare-ambry-analyzed_servable_progressive_video/0/1661530843805?e=2147483647&v=beta&t=6z_Mfhn_0PsqgKWd-70R8TUBEEymcbUcSY8RZD3wfuQ")
+                .setMediaAdTime(10)
+
 //                .addSubtitle("https://cloudspace.huma.ir/s/mrziWnyAM4sEimw/download","en")
 //                .addSubtitle("https://cloudspace.huma.ir/s/68q8tKu1I9XTiXg/download", "fa")
 //                .addSubtitle("https://cloudspace.huma.ir/s/ruRcEJ12X3806Df/download", "en")
@@ -134,7 +140,8 @@ class MainActivity : FragmentActivity() {
 
 
         playerView.typeface = Typeface.createFromAsset(assets, "fonts/BYekan.ttf")
-        player.start()
+//        player.start()
+        playerView.playVideo()
     }
 
     override fun onPause() {

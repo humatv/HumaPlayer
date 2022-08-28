@@ -110,11 +110,9 @@ class HumaExoPlayer(context: Context) : SimpleExoPlayer(SimpleExoPlayer.Builder(
         } else {
             if (mediaInfoes.get(0).index > index) {
                 newIndex = 0
-            }
-            else if (mediaInfoes.size > index) {
+            } else if (mediaInfoes.size > index) {
                 newIndex = index
-            }
-            else {
+            } else {
                 newIndex = mediaInfoes.size
             }
         }
@@ -173,12 +171,10 @@ class HumaExoPlayer(context: Context) : SimpleExoPlayer(SimpleExoPlayer.Builder(
 
     fun start(currentIndex: Int = 0) {
         Log.d("MyExoPlayer", "start")
-
         seekToDefaultPosition(currentIndex)
         if (getCurrentMedia()!!.seek > currentPosition) {
             seekTo(getCurrentMedia()!!.seek)
         }
-
         prepare()
         play()
     }
@@ -186,5 +182,6 @@ class HumaExoPlayer(context: Context) : SimpleExoPlayer(SimpleExoPlayer.Builder(
     interface UpdateViewListener {
         fun update(player: SimpleExoPlayer, mediaInfo: MediaInfo)
     }
+
 
 }

@@ -20,10 +20,12 @@ class MediaInfo {
     var index: Int = 0
     var backgroundUrl: String? = null
     var mediaQualities = LinkedHashMap<String, Uri>()
+    var mediaAd: String = ""
+    var adTime: Int = 0
     var subtitles: ArrayList<MediaItem.Subtitle>? = null
     var seek: Long = 0
     var hasVideo: Boolean? = null
-    var tag : Any? = null
+    var tag: Any? = null
 
     var currentSubtitle: Int? = null
         set(value) {
@@ -105,7 +107,7 @@ class MediaInfo {
         return this
     }
 
-    fun setTag(tag : Any): MediaInfo {
+    fun setTag(tag: Any): MediaInfo {
         this.tag = tag
         return this
     }
@@ -216,6 +218,16 @@ class MediaInfo {
 
     fun addMediaQuality(quality: String, uri: String): MediaInfo {
         mediaQualities.put(quality, Uri.parse(uri))
+        return this
+    }
+
+    fun setMediaAdLink(uri: String): MediaInfo {
+        mediaAd = uri
+        return this
+    }
+
+    fun setMediaAdTime(timeS: Int): MediaInfo {
+        adTime = timeS
         return this
     }
 
