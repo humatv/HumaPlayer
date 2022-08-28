@@ -43,6 +43,7 @@ class HumaExoPlayerView : FrameLayout {
     var showVisualizer = true
 
     var showControllerTimeout = 4000
+    var playerCurrentIndex = 0
 
     var typeface: Typeface? = null
         set(value) {
@@ -54,7 +55,7 @@ class HumaExoPlayerView : FrameLayout {
             view.findViewById<TextView>(R.id.exo_position).typeface = value
         }
 
-    private var adPlayer: HumaExoPlayer? = null
+    var adPlayer: HumaExoPlayer? = null
     var player: HumaExoPlayer? = null
         set(value) {
             field = value
@@ -429,10 +430,11 @@ class HumaExoPlayerView : FrameLayout {
     private fun closeAdAndPlayMainVideo() {
         adPlayerView.visibility = GONE
         adPlayer?.release()
-        if (!player?.isPlaying!!) player?.start()
+        if (!player?.isPlaying!!) player?.start(playerCurrentIndex)
     }
 
     fun playVideo(currentIndex: Int = 0) {
+        playerCurrentIndex = currentIndex
         if (!player?.getCurrentMedia()?.mediaAd!!.isEmpty()) {
             adPlayerView.visibility = VISIBLE
             adPlayer?.addMedia(
