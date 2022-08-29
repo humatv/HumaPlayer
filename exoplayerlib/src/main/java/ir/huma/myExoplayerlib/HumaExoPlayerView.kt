@@ -43,7 +43,7 @@ class HumaExoPlayerView : FrameLayout {
     var showVisualizer = true
 
     var showControllerTimeout = 4000
-    var playerCurrentIndex = 0
+    var playerCurrentMediaId = ""
 
     var typeface: Typeface? = null
         set(value) {
@@ -430,14 +430,25 @@ class HumaExoPlayerView : FrameLayout {
         adPlayerView.player = null
         adPlayer?.release()
         player?.let { safePlayer ->
-            if (!safePlayer.isPlaying) safePlayer.start(playerCurrentIndex)
+            if (!safePlayer.isPlaying) safePlayer.start(getCurrentMediaIndex())
         }
     }
 
+    private fun getCurrentMediaIndex(): Int {
+        var index = 0
+        player?.let { safePlayer ->
+            safePlayer.mediaInfoes.forEachIndexed { i, mediaInfo ->
+                if (mediaInfo.id.equals(playerCurrentMediaId)) index = i
+            }
+        }
+        return index
+
+    }
+
     fun playVideo(currentIndex: Int = 0) {
-        playerCurrentIndex = currentIndex
         player?.let { safePlayer ->
             if (!safePlayer.getCurrentMedia()?.mediaAd?.isEmpty()!!) {
+                playerCurrentMediaId = safePlayer.getCurrentMedia()?.id!!
                 adPlayerView.visibility = VISIBLE
                 adPlayer?.addMedia(
                     0, MediaInfo().addMediaQuality(
@@ -446,7 +457,7 @@ class HumaExoPlayerView : FrameLayout {
                     )
                 )
                 adPlayer?.start(0)
-                safePlayer.prepare()
+//                safePlayer.prepare()
             } else {
                 adPlayerView.visibility = GONE
                 safePlayer.start(currentIndex)
