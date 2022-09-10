@@ -21,7 +21,7 @@ class MediaInfo {
     var backgroundUrl: String? = null
     var mediaQualities = LinkedHashMap<String, Uri>()
     var mediaAd: String = ""
-//    var adTime: Int = 0
+    var adTimeToSkipp: Int = 0
     var subtitles: ArrayList<MediaItem.Subtitle>? = null
     var seek: Long = 0
     var hasVideo: Boolean? = null
@@ -226,10 +226,10 @@ class MediaInfo {
         return this
     }
 
-//    fun setMediaAdTime(timeS: Int): MediaInfo {
-//        adTime = timeS
-//        return this
-//    }
+    fun setTimeToSkipp(timeS: Int): MediaInfo {
+        adTimeToSkipp = timeS
+        return this
+    }
 
     fun getCurrentSubtitle(): MediaItem.Subtitle? {
         if (subtitles != null && currentSubtitle != null) {

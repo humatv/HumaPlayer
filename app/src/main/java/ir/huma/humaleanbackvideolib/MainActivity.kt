@@ -9,7 +9,6 @@ import android.view.View.VISIBLE
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
-import com.bumptech.glide.Glide
 import ir.huma.myExoplayerlib.HumaExoPlayer
 import ir.huma.myExoplayerlib.HumaExoPlayerView
 import ir.huma.myExoplayerlib.MediaInfo
@@ -44,22 +43,28 @@ class MainActivity : FragmentActivity() {
 //        myExoPlayer.addMediaItem(MediaInfo().addMediaQuality("", "file://"+rootFile.absoluteFile+"/285ccb9c-e2be-4ee8-97fc-64cc5fc27f3a.mp4"))
 //
 
-        Glide.with(this)
-            .load("https://music-fa.com/wp-content/uploads/2020/12/Mohammad-Motamedi-Tehrane-Ashegh-Cover-Music-fa.com_-1.jpg")
-            .into(playerView.backImageView!!)
+//        Glide.with(this)
+//            .load("https://music-fa.com/wp-content/uploads/2020/12/Mohammad-Motamedi-Tehrane-Ashegh-Cover-Music-fa.com_-1.jpg")
+//            .into(playerView.backImageView!!)
         playerView.backImageView?.visibility = VISIBLE
 
+//        player.addMedia(
+//            MediaInfo().setTitle("تست پخش زنده").setLive(true).addMediaQuality(
+//                "",
+//                "https://onlines.uptvs.com/stream/movie/Day_Shift_UPTV.co_Dub/720p.m3u8"
+//            )
+//        )
         player.addMedia(
-            MediaInfo().setTitle("تهران عاشق")
-                .setLogoUrl("https://music-fa.com/wp-content/uploads/2020/12/Mohammad-Motamedi-Tehrane-Ashegh-Cover-Music-fa.com_-1.jpg")
+            MediaInfo().setTitle("دیرین دیرین")
+                .setLogoUrl("http://shirintanz.ir/wp-content/uploads/2018/06/%D9%88%DB%8C-%D8%AF%DB%8C%D8%B1%DB%8C%D9%86-%D8%AF%DB%8C%D8%B1%DB%8C%D9%86.png")
 //                .setBackgroundUrl("https://music-fa.com/wp-content/uploads/2020/12/Mohammad-Motamedi-Tehrane-Ashegh-Cover-Music-fa.com_-1.jpg")
                 .setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.")
                 .addMediaQuality(
-                    "128",
-                    "https://dls.music-fa.com/tagdl/99/Mohammad%20Motamedi%20-%20Gole%20Sang%20(320).mp3"
+                    "480",
+                    "https://as8.asset.aparat.com/aparat-video/b32f82bc09b0d740f71e5a8f4f0fc39f26469291-720p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjhkNzY5NTNmMTM1NWJiODM1NjIxZDI2OGEzMzE5ZjViIiwiZXhwIjoxNjYyODI0MzU2LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.pItGGbVwHlqusSoGdgDJJbPFTg-7icLfwMyrY5SDY_4"
                 )
-                .setMediaAdLink("https://hw6.asset.aparat.com/aparat-video/cda602eb67480ceb405429f9515987df24564321-480p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImIxNTIwY2NjZjE4ZDJjOGExOGVkYzBiY2IyYWI4ZDJlIiwiZXhwIjoxNjYxNzA5MjQ2LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.eWogn8uy1Ep8JGbKqthGWTBepzVj6gH2LR6o0a84kOI")
-//                .setMediaAdTime(10)
+                .setMediaAdLink("https://persian2.asset.aparat.com/aparat-video/aa0562cd159b70f194f2b59d0bd0d4d044291976-480p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImJiNTBjYTFkMzA0OTcyZDhhNzUwMmE0YjAxODdmN2FkIiwiZXhwIjoxNjYyODI0MjU1LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.4Emt5XYZOVRdG1C_AKcg4a4mQbSLrKWjEZGsx1-IzM0")
+                .setTimeToSkipp(8)
         )
 
         player.addMedia(

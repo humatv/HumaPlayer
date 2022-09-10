@@ -3,4 +3,5 @@
     <color name="colorAccent">#F44336</color>
     <color name="huma_player_Color">@color/colorAccent</color>
     <color name="huma_player_visualizer_Color">#ffffff</color>
+
 </resources>

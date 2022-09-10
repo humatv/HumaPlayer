@@ -27,6 +27,7 @@ import ir.huma.myExoplayerlib.util.MyAdapter
 import ir.huma.myExoplayerlib.util.MyPlayerView
 import ir.huma.myExoplayerlib.util.TextDrawable
 import java.util.*
+import kotlin.math.min
 
 class HumaExoPlayerView : FrameLayout {
     private val TAG = "HumaExoPlayerView"
@@ -49,7 +50,7 @@ class HumaExoPlayerView : FrameLayout {
         set(value) {
             field = value
             titleTextView?.typeface = value
-            addTimeTextView?.typeface = value
+            skippTimeButton.typeface = value
             descriptionTextView?.typeface = value
             view.findViewById<TextView>(R.id.exo_duration).typeface = value
             view.findViewById<TextView>(R.id.exo_position).typeface = value
@@ -73,6 +74,7 @@ class HumaExoPlayerView : FrameLayout {
     private lateinit var visualizer: MyLineBarVisualizer
     private lateinit var avatarImageView: ImageView
     private lateinit var qualityButton: ImageView
+    private lateinit var skippTimeButton: Button
     var subtitleButton: ImageView? = null
         private set
     var descriptionTextView: TextView? = null
@@ -84,14 +86,20 @@ class HumaExoPlayerView : FrameLayout {
 
     private var subtitleView: SubtitleView? = null
 
-    var addTimeTextView: TextView? = null
-    private var maxAdTime: Int = 0
+    private var adTimeToSkippS: Int = 0
+    var adCanSkipp = false
+
+    companion object {
+        private const val SKIPP_TEXT = "رد کردن آگهی"
+
+    }
 
     fun init() {
         view = LayoutInflater.from(context).inflate(R.layout.my_exo_player_mananger, this, true)
         playerView = view.findViewById(R.id.playerView)
         adPlayerView = view.findViewById(R.id.adPlayerView)
-        addTimeTextView = view.findViewById(R.id.addTimeTextView)
+        skippTimeButton = view.findViewById(R.id.skippTimeButton)
+
         visualizer = view.findViewById(R.id.visualizer)
         titleTextView = view.findViewById(R.id.titleTextView)
         descriptionTextView = view.findViewById(R.id.descriptionTextView)
@@ -113,13 +121,16 @@ class HumaExoPlayerView : FrameLayout {
         playerView.setOnBackListener {
             if (player?.getCurrentMedia()?.hasVideo == true && playerView.isControllerVisible) {
                 playerView.hideController()
-
                 true
             } else
                 false
         }
 
 
+        skippTimeButton.setOnClickListener {
+            if (!adCanSkipp) return@setOnClickListener
+            closeAdAndPlayMainVideo()
+        }
         qualityButton.setOnClickListener {
             val item = player?.getCurrentMedia()
             if (player?.defaultQuality == null) {
@@ -381,6 +392,7 @@ class HumaExoPlayerView : FrameLayout {
             super.onIsPlayingChanged(isPlaying)
             if (isPlaying) {
                 calculateMaxAdTime()
+                skippTimeButton.visibility = VISIBLE
                 updateAdTime()
             }
         }
@@ -405,20 +417,32 @@ class HumaExoPlayerView : FrameLayout {
     }
 
     private fun calculateMaxAdTime() {
-        adPlayer?.let { safeAdPlayer ->
-            maxAdTime = safeAdPlayer.duration.toInt() / 1000
+        player?.let { safePlayer ->
+            adPlayer?.let { safeAdPlayer ->
+                if (safePlayer.getCurrentMedia()?.adTimeToSkipp == 0) {
+                    adTimeToSkippS = 10
+                } else {
+                    adTimeToSkippS = min(
+                        safeAdPlayer.duration.toInt() / 1000,
+                        safePlayer.getCurrentMedia()?.adTimeToSkipp!!
+                    )
+                }
+            }
         }
     }
 
     private fun updateAdTime() {
         adPlayer?.let { safeAdPlayer ->
-            val timeToEndAd = (maxAdTime - safeAdPlayer.currentPosition / 1000).toInt()
-            addTimeTextView?.text =
-                "آگهی (${timeToEndAd})"
+            val timeToEndAd = (adTimeToSkippS - safeAdPlayer.currentPosition / 1000).toInt()
+            skippTimeButton.text = "$SKIPP_TEXT (${timeToEndAd})"
             Handler(context.mainLooper).postDelayed(object : Runnable {
                 override fun run() {
                     if (timeToEndAd > 1) {
                         updateAdTime()
+                    } else {
+                        skippTimeButton.text = SKIPP_TEXT
+                        skippTimeButton.requestFocus()
+                        adCanSkipp = true
                     }
                 }
             }, 1000)
@@ -448,7 +472,9 @@ class HumaExoPlayerView : FrameLayout {
     fun playVideo(currentIndex: Int = 0) {
         player?.let { safePlayer ->
             if (!safePlayer.getCurrentMedia()?.mediaAd?.isEmpty()!!) {
-                playerCurrentMediaId = safePlayer.getCurrentMedia()?.id!!
+                safePlayer.getCurrentMedia()?.id?.let {
+                    playerCurrentMediaId = it
+                }
                 adPlayerView.visibility = VISIBLE
                 adPlayer?.addMedia(
                     0, MediaInfo().addMediaQuality(
@@ -457,7 +483,6 @@ class HumaExoPlayerView : FrameLayout {
                     )
                 )
                 adPlayer?.start(0)
-//                safePlayer.prepare()
             } else {
                 adPlayerView.visibility = GONE
                 safePlayer.start(currentIndex)
