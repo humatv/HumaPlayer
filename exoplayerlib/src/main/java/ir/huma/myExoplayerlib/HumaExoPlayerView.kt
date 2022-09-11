@@ -480,7 +480,7 @@ class HumaExoPlayerView : FrameLayout {
     private fun updateAdTime() {
         adPlayer?.let { safeAdPlayer ->
             val timeToEndAd = (adTimeToSkippS - safeAdPlayer.currentPosition / 1000).toInt()
-            if (timeToEndAd > 1) {
+            if (timeToEndAd > 0) {
                 skippTimeButton.text = "$SKIPP_TEXT (${timeToEndAd})"
             } else {
                 if (this::adPlayerInterface.isInitialized) adPlayerInterface.onFinishForceAdvertisingTime()
@@ -489,7 +489,7 @@ class HumaExoPlayerView : FrameLayout {
                 adCanSkipp = true
             }
             Handler(context.mainLooper).postDelayed({
-                if (timeToEndAd > 1) updateAdTime()
+                if (timeToEndAd > 0) updateAdTime()
             }, 1000)
         }
     }
