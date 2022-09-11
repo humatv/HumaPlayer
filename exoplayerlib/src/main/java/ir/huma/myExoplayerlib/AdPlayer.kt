@@ -17,5 +17,7 @@ interface AdPlayer {
         trackSelections: TrackSelectionArray
     ) {
     }
+
     fun onSkippButtonClickListener() {}
+    fun onFinishForceAdvertisingTime() {}
 }

@@ -479,6 +479,7 @@ class HumaExoPlayerView : FrameLayout {
                 if (timeToEndAd > 1) {
                     updateAdTime()
                 } else {
+                    if (this::adPlayerInterface.isInitialized) adPlayerInterface.onFinishForceAdvertisingTime()
                     skippTimeButton.text = SKIPP_TEXT
                     skippTimeButton.requestFocus()
                     adCanSkipp = true
