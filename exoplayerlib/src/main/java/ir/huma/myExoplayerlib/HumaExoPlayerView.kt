@@ -531,6 +531,9 @@ class HumaExoPlayerView : FrameLayout {
             } else {
                 adPlayerView.visibility = GONE
                 safePlayer.start(currentIndex)
+                Handler(Looper.getMainLooper()).postDelayed({
+                    playerView.requestFocus()
+                }, 1000)
             }
         }
     }
