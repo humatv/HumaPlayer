@@ -413,6 +413,9 @@ class HumaExoPlayerView : FrameLayout {
                 calculateMaxAdTime()
             }
             if (playbackState == Player.STATE_ENDED || playbackState == Player.STATE_IDLE) {
+                adPlayer?.let { safeAdPlayer ->
+                    if (::adPlayerInterface.isInitialized) adPlayerInterface.onSeenAdToEnd((safeAdPlayer.duration / 1e3).toInt())
+                }
                 closeAdAndPlayMainVideo()
             }
         }
@@ -421,6 +424,9 @@ class HumaExoPlayerView : FrameLayout {
             super.onPositionDiscontinuity(reason)
             if (::adPlayerInterface.isInitialized) adPlayerInterface.onPositionDiscontinuity(reason)
             if (reason == Player.DISCONTINUITY_REASON_PERIOD_TRANSITION) {
+                adPlayer?.let { safeAdPlayer ->
+                    if (::adPlayerInterface.isInitialized) adPlayerInterface.onSeenAdToEnd((safeAdPlayer.duration / 1e3).toInt())
+                }
                 closeAdAndPlayMainVideo()
             }
         }
@@ -489,9 +495,6 @@ class HumaExoPlayerView : FrameLayout {
     }
 
     private fun closeAdAndPlayMainVideo() {
-        adPlayer?.let { safeAdPlayer ->
-            if (this::adPlayerInterface.isInitialized) adPlayerInterface.onSeenAdToEnd((safeAdPlayer.duration / 1e3).toInt())
-        }
         adPlayerView.visibility = GONE
         adPlayerView.player = null
         adPlayer?.release()
