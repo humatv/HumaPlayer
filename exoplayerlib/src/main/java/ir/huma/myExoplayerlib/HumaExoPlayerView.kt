@@ -1,11 +1,13 @@
 package ir.huma.myExoplayerlib
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.os.Handler
+import android.os.Looper
 import android.util.AttributeSet
 import android.util.Log
 import android.view.Gravity
@@ -18,10 +20,13 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.DrawableImageViewTarget
 import com.bumptech.glide.request.transition.Transition
 import com.chibde.visualizer.LineBarVisualizer
+import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.audio.AudioListener
+import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.text.CaptionStyleCompat
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.ui.SubtitleView
 import ir.huma.myExoplayerlib.util.MyAdapter
 import ir.huma.myExoplayerlib.util.MyPlayerView
@@ -43,8 +48,8 @@ class HumaExoPlayerView : FrameLayout {
     var showDescriptionOnAudio = true
     var showVisualizer = true
 
-    var showControllerTimeout = 4000
-    var playerCurrentMediaId = ""
+    private var showControllerTimeout = 4000
+    private var playerCurrentMediaId = ""
 
     var typeface: Typeface? = null
         set(value) {
@@ -69,6 +74,7 @@ class HumaExoPlayerView : FrameLayout {
         }
     private lateinit var playerView: MyPlayerView
     private lateinit var adPlayerView: MyPlayerView
+    private lateinit var adPlayerInterface: AdPlayer
 
     private lateinit var view: View
     private lateinit var visualizer: MyLineBarVisualizer
@@ -129,6 +135,7 @@ class HumaExoPlayerView : FrameLayout {
 
         skippTimeButton.setOnClickListener {
             if (!adCanSkipp) return@setOnClickListener
+            if (this::adPlayerInterface.isInitialized) adPlayerInterface.onSkippButtonClickListener()
             closeAdAndPlayMainVideo()
         }
         qualityButton.setOnClickListener {
@@ -163,14 +170,12 @@ class HumaExoPlayerView : FrameLayout {
 
         if (player?.isPlaying!!) {
             Log.d(TAG, "init: isPlaying")
-            Handler().postDelayed({
+            Handler(Looper.getMainLooper()).postDelayed({
                 setData()
             }, 1000)
         }
 
-        adPlayer?.let { safeAdPlayer ->
-            safeAdPlayer.addListener(adPlayerEventListener)
-        }
+        adPlayer?.addListener(adPlayerEventListener)
     }
 
     private fun initVisualizer() {
@@ -203,13 +208,11 @@ class HumaExoPlayerView : FrameLayout {
             } catch (e: Exception) {
             }
         }
-        Handler().postDelayed(object : Runnable {
-            override fun run() {
-                try {
-                    visualizer.setPlayer(audioSessionId)
-                } catch (e: Exception) {
-//                    setAudioSession(audioSessionId)
-                }
+        Handler(Looper.getMainLooper()).postDelayed({
+            try {
+                visualizer.setPlayer(audioSessionId)
+            } catch (e: Exception) {
+                //                    setAudioSession(audioSessionId)
             }
         }, 1000)
 
@@ -252,7 +255,7 @@ class HumaExoPlayerView : FrameLayout {
             if (player?.getCurrentMedia() != null && player?.getCurrentMedia()?.subtitles != null) {
                 temp = true
                 for (item in player?.getCurrentMedia()?.subtitles!!) {
-                    val loc = Locale(item.language)
+                    val loc = Locale(item.language.toString())
                     val name: String = loc.getDisplayLanguage(loc)
                     adapter.add(name)
                 }
@@ -307,7 +310,7 @@ class HumaExoPlayerView : FrameLayout {
 
 
     private fun handleVideoUI(hasVideo: Boolean?) {
-        Log.d(TAG, "handleVideoUI: ${hasVideo}")
+        Log.d(TAG, "handleVideoUI: $hasVideo")
         if (hasVideo == false) {
             descriptionTextView?.visibility =
                 if (showDescriptionOnAudio) GONE else VISIBLE
@@ -331,7 +334,7 @@ class HumaExoPlayerView : FrameLayout {
 
     private fun setData() {
         val item = player?.getCurrentMedia() ?: return
-        Log.d(TAG, "setData: ${item}")
+        Log.d(TAG, "setData: $item")
         titleTextView?.text = item.title
         descriptionTextView?.text = item.description
         if (item.description != null && item.hasVideo == true) {
@@ -381,6 +384,7 @@ class HumaExoPlayerView : FrameLayout {
 
     fun showController() {
         playerView.showController()
+
     }
 
     fun hideController() {
@@ -390,6 +394,7 @@ class HumaExoPlayerView : FrameLayout {
     private val adPlayerEventListener = object : Player.EventListener {
         override fun onIsPlayingChanged(isPlaying: Boolean) {
             super.onIsPlayingChanged(isPlaying)
+            if (::adPlayerInterface.isInitialized) adPlayerInterface.onIsPlayingChanged(isPlaying)
             if (isPlaying) {
                 calculateMaxAdTime()
                 skippTimeButton.visibility = VISIBLE
@@ -400,6 +405,10 @@ class HumaExoPlayerView : FrameLayout {
         @Deprecated("Deprecated in Java")
         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
             super.onPlayerStateChanged(playWhenReady, playbackState)
+            if (::adPlayerInterface.isInitialized) adPlayerInterface.onPlayerStateChanged(
+                playWhenReady,
+                playbackState
+            )
             if (playWhenReady && playbackState == Player.STATE_READY) {
                 calculateMaxAdTime()
             }
@@ -410,19 +419,49 @@ class HumaExoPlayerView : FrameLayout {
 
         override fun onPositionDiscontinuity(reason: Int) {
             super.onPositionDiscontinuity(reason)
+            if (::adPlayerInterface.isInitialized) adPlayerInterface.onPositionDiscontinuity(reason)
             if (reason == Player.DISCONTINUITY_REASON_PERIOD_TRANSITION) {
                 closeAdAndPlayMainVideo()
             }
+        }
+
+        override fun onPlayerError(error: ExoPlaybackException) {
+            super.onPlayerError(error)
+            if (::adPlayerInterface.isInitialized) adPlayerInterface.onPlayerError(error)
+        }
+
+        override fun onPlaybackStateChanged(state: Int) {
+            super.onPlaybackStateChanged(state)
+            if (::adPlayerInterface.isInitialized) adPlayerInterface.onPlaybackStateChanged(state)
+        }
+
+        override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
+            super.onPlayWhenReadyChanged(playWhenReady, reason)
+            if (::adPlayerInterface.isInitialized) adPlayerInterface.onPlayWhenReadyChanged(
+                playWhenReady,
+                reason
+            )
+        }
+
+        override fun onTracksChanged(
+            trackGroups: TrackGroupArray,
+            trackSelections: TrackSelectionArray
+        ) {
+            super.onTracksChanged(trackGroups, trackSelections)
+            if (::adPlayerInterface.isInitialized) adPlayerInterface.onTracksChanged(
+                trackGroups,
+                trackSelections
+            )
         }
     }
 
     private fun calculateMaxAdTime() {
         player?.let { safePlayer ->
             adPlayer?.let { safeAdPlayer ->
-                if (safePlayer.getCurrentMedia()?.adTimeToSkipp == 0) {
-                    adTimeToSkippS = 10
+                adTimeToSkippS = if (safePlayer.getCurrentMedia()?.adTimeToSkipp == 0) {
+                    10
                 } else {
-                    adTimeToSkippS = min(
+                    min(
                         safeAdPlayer.duration.toInt() / 1000,
                         safePlayer.getCurrentMedia()?.adTimeToSkipp!!
                     )
@@ -431,19 +470,18 @@ class HumaExoPlayerView : FrameLayout {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun updateAdTime() {
         adPlayer?.let { safeAdPlayer ->
             val timeToEndAd = (adTimeToSkippS - safeAdPlayer.currentPosition / 1000).toInt()
             skippTimeButton.text = "$SKIPP_TEXT (${timeToEndAd})"
-            Handler(context.mainLooper).postDelayed(object : Runnable {
-                override fun run() {
-                    if (timeToEndAd > 1) {
-                        updateAdTime()
-                    } else {
-                        skippTimeButton.text = SKIPP_TEXT
-                        skippTimeButton.requestFocus()
-                        adCanSkipp = true
-                    }
+            Handler(context.mainLooper).postDelayed({
+                if (timeToEndAd > 1) {
+                    updateAdTime()
+                } else {
+                    skippTimeButton.text = SKIPP_TEXT
+                    skippTimeButton.requestFocus()
+                    adCanSkipp = true
                 }
             }, 1000)
         }
@@ -488,5 +526,9 @@ class HumaExoPlayerView : FrameLayout {
                 safePlayer.start(currentIndex)
             }
         }
+    }
+
+    fun addAdPlayerListener(adPlayer: AdPlayer) {
+        adPlayerInterface = adPlayer
     }
 }

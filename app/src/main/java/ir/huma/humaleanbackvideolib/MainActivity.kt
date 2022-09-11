@@ -5,10 +5,13 @@ import android.content.pm.PackageManager
 import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Environment
+import android.util.Log
 import android.view.View.VISIBLE
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
+import com.google.android.exoplayer2.ExoPlaybackException
+import ir.huma.myExoplayerlib.AdPlayer
 import ir.huma.myExoplayerlib.HumaExoPlayer
 import ir.huma.myExoplayerlib.HumaExoPlayerView
 import ir.huma.myExoplayerlib.MediaInfo
@@ -18,6 +21,8 @@ import java.io.File
 class MainActivity : FragmentActivity() {
     lateinit var playerView: HumaExoPlayerView
     lateinit var player: HumaExoPlayer
+
+    private val TAG = "MainActivity"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -61,9 +66,9 @@ class MainActivity : FragmentActivity() {
                 .setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.")
                 .addMediaQuality(
                     "480",
-                    "https://as8.asset.aparat.com/aparat-video/b32f82bc09b0d740f71e5a8f4f0fc39f26469291-720p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjhkNzY5NTNmMTM1NWJiODM1NjIxZDI2OGEzMzE5ZjViIiwiZXhwIjoxNjYyODI0MzU2LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.pItGGbVwHlqusSoGdgDJJbPFTg-7icLfwMyrY5SDY_4"
+                    "https://hajifirouz5.asset.aparat.com/aparat-video/57de0422a208be124be5d2dd2a4c8e9942530607-720p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImY1MjY5MGM1YzZlYjA0YTI5NWRkMzA2Mzc1Mjk5ODQ3IiwiZXhwIjoxNjYyODk0MjA2LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.mSuSnt4FFDkuaFxXhwYfac0ysdB267GjIq-6BWhYk3c"
                 )
-                .setMediaAdLink("https://persian2.asset.aparat.com/aparat-video/aa0562cd159b70f194f2b59d0bd0d4d044291976-480p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImJiNTBjYTFkMzA0OTcyZDhhNzUwMmE0YjAxODdmN2FkIiwiZXhwIjoxNjYyODI0MjU1LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.4Emt5XYZOVRdG1C_AKcg4a4mQbSLrKWjEZGsx1-IzM0")
+                .setMediaAdLink("https://persian4.asset.aparat.com/aparat-video/6f44a7a05130f05aeccb4e905cf1ad3f45695174-720p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjQ0ZjI2ZDBmNjAzZWUzYTJmNTAwYzBjZjg4Yjc1NTc2IiwiZXhwIjoxNjYyODk0MTMwLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.Nfu0ySYGzVxUZbpUtQXiLzcTQOpZszYDex3TumMH6NU")
                 .setTimeToSkipp(8)
         )
 
@@ -146,6 +151,8 @@ class MainActivity : FragmentActivity() {
 
         playerView.typeface = Typeface.createFromAsset(assets, "fonts/BYekan.ttf")
 //        player.start()
+
+        playerView.addAdPlayerListener(adPlayerEventListener)
         playerView.playVideo()
     }
 
@@ -159,4 +166,16 @@ class MainActivity : FragmentActivity() {
         player.release()
     }
 
+    private val adPlayerEventListener = object : AdPlayer {
+        override fun onIsPlayingChanged(isPlaying: Boolean) {
+            Log.d(TAG, "onIsPlayingChanged: isPlaying $isPlaying")
+        }
+
+        override fun onPlayerError(error: ExoPlaybackException) {
+        }
+
+        override fun onPositionDiscontinuity(reason: Int) {
+        }
+
+    }
 }
