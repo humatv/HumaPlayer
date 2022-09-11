@@ -474,21 +474,24 @@ class HumaExoPlayerView : FrameLayout {
     private fun updateAdTime() {
         adPlayer?.let { safeAdPlayer ->
             val timeToEndAd = (adTimeToSkippS - safeAdPlayer.currentPosition / 1000).toInt()
-            skippTimeButton.text = "$SKIPP_TEXT (${timeToEndAd})"
+            if (timeToEndAd > 1) {
+                skippTimeButton.text = "$SKIPP_TEXT (${timeToEndAd})"
+            } else {
+                if (this::adPlayerInterface.isInitialized) adPlayerInterface.onFinishForceAdvertisingTime()
+                skippTimeButton.text = SKIPP_TEXT
+                skippTimeButton.requestFocus()
+                adCanSkipp = true
+            }
             Handler(context.mainLooper).postDelayed({
-                if (timeToEndAd > 1) {
-                    updateAdTime()
-                } else {
-                    if (this::adPlayerInterface.isInitialized) adPlayerInterface.onFinishForceAdvertisingTime()
-                    skippTimeButton.text = SKIPP_TEXT
-                    skippTimeButton.requestFocus()
-                    adCanSkipp = true
-                }
+                if (timeToEndAd > 1) updateAdTime()
             }, 1000)
         }
     }
 
     private fun closeAdAndPlayMainVideo() {
+        adPlayer?.let { safeAdPlayer ->
+            if (this::adPlayerInterface.isInitialized) adPlayerInterface.onSeenAdToEnd((safeAdPlayer.duration / 1e3).toInt())
+        }
         adPlayerView.visibility = GONE
         adPlayerView.player = null
         adPlayer?.release()

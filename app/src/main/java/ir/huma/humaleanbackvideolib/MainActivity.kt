@@ -11,6 +11,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import com.google.android.exoplayer2.ExoPlaybackException
+import com.google.android.exoplayer2.Player
 import ir.huma.myExoplayerlib.AdPlayer
 import ir.huma.myExoplayerlib.HumaExoPlayer
 import ir.huma.myExoplayerlib.HumaExoPlayerView
@@ -175,7 +176,15 @@ class MainActivity : FragmentActivity() {
         }
 
         override fun onPositionDiscontinuity(reason: Int) {
+            Log.d(TAG, "onPositionDiscontinuity: reason $reason")
+            if (reason == Player.DISCONTINUITY_REASON_PERIOD_TRANSITION) {
+                Log.d(TAG, "onPositionDiscontinuity: DISCONTINUITY $reason")
+            }
         }
 
+        override fun onSeenAdToEnd(duration: Int) {
+            super.onSeenAdToEnd(duration)
+            Log.d(TAG, "onSeenAdToEnd:duration $duration")
+        }
     }
 }

@@ -20,4 +20,5 @@ interface AdPlayer {
 
     fun onSkippButtonClickListener() {}
     fun onFinishForceAdvertisingTime() {}
+    fun onSeenAdToEnd(duration: Int) {}
 }
