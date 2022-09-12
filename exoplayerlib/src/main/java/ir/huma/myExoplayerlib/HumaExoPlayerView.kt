@@ -506,8 +506,8 @@ class HumaExoPlayerView : FrameLayout {
             if (!safePlayer.isPlaying) {
                 safePlayer.start(getCurrentMediaIndex())
                 Handler(Looper.getMainLooper()).postDelayed({
-                    exoProgress.requestFocus()
-                }, 500)
+                    playerView.requestFocus()
+                }, 1000)
             }
         }
     }
@@ -541,8 +541,8 @@ class HumaExoPlayerView : FrameLayout {
                 adPlayerView.visibility = GONE
                 safePlayer.start(currentIndex)
                 Handler(Looper.getMainLooper()).postDelayed({
-                    exoProgress.requestFocus()
-                }, 500)
+                    playerView.requestFocus()
+                }, 1000)
             }
         }
     }
