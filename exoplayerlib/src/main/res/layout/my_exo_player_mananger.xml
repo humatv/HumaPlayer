@@ -15,7 +15,8 @@
         android:focusableInTouchMode="true"
         android:visibility="visible"
         app:controller_layout_id="@layout/layout_controller_player"
-        app:use_artwork="false">
+        app:use_artwork="false"
+        app:use_controller="true">
 
         <requestFocus />
     </ir.huma.myExoplayerlib.util.MyPlayerView>
@@ -30,7 +31,7 @@
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:visibility="gone"
-        app:controller_layout_id="@layout/layout_controller_adplayer"
+        app:controller_layout_id="@layout/layout_controller_ad_player"
         app:hide_on_touch="false"
         app:use_artwork="false">
 
