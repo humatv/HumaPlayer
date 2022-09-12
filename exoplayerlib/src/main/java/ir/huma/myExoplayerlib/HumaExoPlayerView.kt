@@ -109,7 +109,7 @@ class HumaExoPlayerView : FrameLayout {
         adPlayerView = view.findViewById(R.id.adPlayerView)
         skippTimeButton = view.findViewById(R.id.skippTimeButton)
 
-        exoProgress = adPlayerView.findViewById(R.id.exo_progress)
+        exoProgress = playerView.findViewById(R.id.exo_progress)
         visualizer = view.findViewById(R.id.visualizer)
         titleTextView = view.findViewById(R.id.titleTextView)
         descriptionTextView = view.findViewById(R.id.descriptionTextView)
