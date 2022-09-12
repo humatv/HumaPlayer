@@ -30,6 +30,7 @@ import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.ui.SubtitleView
 import ir.huma.myExoplayerlib.util.MyAdapter
 import ir.huma.myExoplayerlib.util.MyPlayerView
+import ir.huma.myExoplayerlib.util.MyTimeBar
 import ir.huma.myExoplayerlib.util.TextDrawable
 import java.util.*
 import kotlin.math.min
@@ -81,6 +82,7 @@ class HumaExoPlayerView : FrameLayout {
     private lateinit var avatarImageView: ImageView
     private lateinit var qualityButton: ImageView
     private lateinit var skippTimeButton: Button
+    private lateinit var exoProgress: MyTimeBar
     var subtitleButton: ImageView? = null
         private set
     var descriptionTextView: TextView? = null
@@ -109,6 +111,7 @@ class HumaExoPlayerView : FrameLayout {
         adPlayerView = view.findViewById(R.id.adPlayerView)
         skippTimeButton = view.findViewById(R.id.skippTimeButton)
 
+        exoProgress = adPlayerView.findViewById(R.id.exo_progress)
         visualizer = view.findViewById(R.id.visualizer)
         titleTextView = view.findViewById(R.id.titleTextView)
         descriptionTextView = view.findViewById(R.id.descriptionTextView)
@@ -502,7 +505,12 @@ class HumaExoPlayerView : FrameLayout {
         adPlayerView.player = null
         adPlayer?.release()
         player?.let { safePlayer ->
-            if (!safePlayer.isPlaying) safePlayer.start(getCurrentMediaIndex())
+            if (!safePlayer.isPlaying) {
+                safePlayer.start(getCurrentMediaIndex())
+                Handler(Looper.getMainLooper()).postDelayed({
+                    exoProgress.requestFocus()
+                }, 500)
+            }
         }
     }
 
@@ -535,8 +543,8 @@ class HumaExoPlayerView : FrameLayout {
                 adPlayerView.visibility = GONE
                 safePlayer.start(currentIndex)
                 Handler(Looper.getMainLooper()).postDelayed({
-                    playerView.requestFocus()
-                }, 1000)
+                    exoProgress.requestFocus()
+                }, 500)
             }
         }
     }
