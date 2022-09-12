@@ -102,8 +102,6 @@ class HumaExoPlayerView : FrameLayout {
 
     }
 
-    var isControllerVisible = playerView.isControllerVisible
-
 
     fun init() {
         view = LayoutInflater.from(context).inflate(R.layout.my_exo_player_mananger, this, true)
