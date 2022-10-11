@@ -14,13 +14,12 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 
-class HumaExoPlayer(context: Context) : SimpleExoPlayer(SimpleExoPlayer.Builder(context)) {
+class HumaExoPlayer(context: Context) : SimpleExoPlayer(Builder(context)) {
 
     private var dataSourceFactoryHttp: DataSource.Factory =
         DefaultHttpDataSourceFactory(Util.getUserAgent(context, context.packageName))
     private var dataSourceFactoryFile: DataSource.Factory = DefaultDataSourceFactory(context)
     private var qualityChanging = false
-    var tag: Any? = null;
     var updateViewListener: UpdateViewListener? = null
     var mediaInfoes = ArrayList<MediaInfo>()
         private set
@@ -34,11 +33,11 @@ class HumaExoPlayer(context: Context) : SimpleExoPlayer(SimpleExoPlayer.Builder(
     private var eventListener = object : Player.EventListener {
         override fun onPlaybackStateChanged(state: Int) {
             if (state == PlaybackState.STATE_PLAYING) {
-                val item = getCurrentMedia()
-
-                updateViewListener?.update(this@HumaExoPlayer, item!!)
-                defaultQuality = item!!.currentQuality
-                qualityChanging = false
+                getCurrentMedia()?.let { safeItem ->
+                    updateViewListener?.update(this@HumaExoPlayer, safeItem)
+                    defaultQuality = safeItem.currentQuality
+                    qualityChanging = false
+                }
 
             }
         }
@@ -52,9 +51,9 @@ class HumaExoPlayer(context: Context) : SimpleExoPlayer(SimpleExoPlayer.Builder(
             if (item!!.hasVideo == null) {
                 if (trackGroups.length == 1 && trackGroups[0].getFormat(0).sampleMimeType?.indexOf("audio") != -1
                 ) {
-                    item!!.hasVideo = false
+                    item.hasVideo = false
                 } else if (trackGroups.length > 1) {
-                    item!!.hasVideo = true
+                    item.hasVideo = true
                 }
             }
 //                super.onTracksChanged(trackGroups, trackSelections)
@@ -104,16 +103,19 @@ class HumaExoPlayer(context: Context) : SimpleExoPlayer(SimpleExoPlayer.Builder(
     }
 
     fun addMedia(index: Int, mediaInfo: MediaInfo) {
-        var newIndex = 0
-        if (mediaInfoes.size == 0) {
-            newIndex = 0
+        val newIndex: Int = if (mediaInfoes.size == 0) {
+            0
         } else {
-            if (mediaInfoes.get(0).index > index) {
-                newIndex = 0
-            } else if (mediaInfoes.size > index) {
-                newIndex = index
-            } else {
-                newIndex = mediaInfoes.size
+            when {
+                mediaInfoes[0].index > index -> {
+                    0
+                }
+                mediaInfoes.size > index -> {
+                    index
+                }
+                else -> {
+                    mediaInfoes.size
+                }
             }
         }
         mediaInfo.index = index
